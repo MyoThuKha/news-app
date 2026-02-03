@@ -17,8 +17,8 @@ class NewsApiServiceImpl implements NewsApiService {
   Future<List<NewsModel>> fetchNews() async {
     try {
       final response = await _dioClient.get(
-        ApiConstants.all,
-        queryParameters: {'q': 'apple', 'page': 1, 'pageSize': 10},
+        ApiConstants.topHeadlines,
+        queryParameters: {'language': 'en', 'page': 1, 'pageSize': 20},
       );
       final List<dynamic> articles = response.data['articles'];
       return articles.map((json) => NewsModel.fromJson(json)).toList();

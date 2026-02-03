@@ -38,16 +38,4 @@ class SourcesDao extends DatabaseAccessor<AppDatabase> with _$SourcesDaoMixin {
   Future<void> clearAllSources() async {
     await delete(sourcesTable).go();
   }
-
-  Future<SourcesTableData?> getSourceById(int id) {
-    return (select(
-      sourcesTable,
-    )..where((t) => t.id.equals(id))).getSingleOrNull();
-  }
-
-  Stream<SourcesTableData?> watchSourceById(int id) {
-    return (select(
-      sourcesTable,
-    )..where((t) => t.id.equals(id))).watchSingleOrNull();
-  }
 }

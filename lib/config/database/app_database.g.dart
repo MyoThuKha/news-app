@@ -9,19 +9,6 @@ class $SourcesTableTable extends SourcesTable
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $SourcesTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-    'id',
-    aliasedName,
-    false,
-    hasAutoIncrement: true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
-  );
   static const VerificationMeta _sourceIdMeta = const VerificationMeta(
     'sourceId',
   );
@@ -66,13 +53,7 @@ class $SourcesTableTable extends SourcesTable
     requiredDuringInsert: false,
   );
   @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    sourceId,
-    name,
-    createdAt,
-    updatedAt,
-  ];
+  List<GeneratedColumn> get $columns => [sourceId, name, createdAt, updatedAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -85,9 +66,6 @@ class $SourcesTableTable extends SourcesTable
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
     if (data.containsKey('source_id')) {
       context.handle(
         _sourceIdMeta,
@@ -116,15 +94,11 @@ class $SourcesTableTable extends SourcesTable
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {sourceId};
   @override
   SourcesTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return SourcesTableData(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
       sourceId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}source_id'],
@@ -152,13 +126,11 @@ class $SourcesTableTable extends SourcesTable
 
 class SourcesTableData extends DataClass
     implements Insertable<SourcesTableData> {
-  final int id;
   final String? sourceId;
   final String? name;
   final DateTime createdAt;
   final DateTime? updatedAt;
   const SourcesTableData({
-    required this.id,
     this.sourceId,
     this.name,
     required this.createdAt,
@@ -167,7 +139,6 @@ class SourcesTableData extends DataClass
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
     if (!nullToAbsent || sourceId != null) {
       map['source_id'] = Variable<String>(sourceId);
     }
@@ -183,7 +154,6 @@ class SourcesTableData extends DataClass
 
   SourcesTableCompanion toCompanion(bool nullToAbsent) {
     return SourcesTableCompanion(
-      id: Value(id),
       sourceId: sourceId == null && nullToAbsent
           ? const Value.absent()
           : Value(sourceId),
@@ -201,7 +171,6 @@ class SourcesTableData extends DataClass
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return SourcesTableData(
-      id: serializer.fromJson<int>(json['id']),
       sourceId: serializer.fromJson<String?>(json['sourceId']),
       name: serializer.fromJson<String?>(json['name']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
@@ -212,7 +181,6 @@ class SourcesTableData extends DataClass
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
       'sourceId': serializer.toJson<String?>(sourceId),
       'name': serializer.toJson<String?>(name),
       'createdAt': serializer.toJson<DateTime>(createdAt),
@@ -221,13 +189,11 @@ class SourcesTableData extends DataClass
   }
 
   SourcesTableData copyWith({
-    int? id,
     Value<String?> sourceId = const Value.absent(),
     Value<String?> name = const Value.absent(),
     DateTime? createdAt,
     Value<DateTime?> updatedAt = const Value.absent(),
   }) => SourcesTableData(
-    id: id ?? this.id,
     sourceId: sourceId.present ? sourceId.value : this.sourceId,
     name: name.present ? name.value : this.name,
     createdAt: createdAt ?? this.createdAt,
@@ -235,7 +201,6 @@ class SourcesTableData extends DataClass
   );
   SourcesTableData copyWithCompanion(SourcesTableCompanion data) {
     return SourcesTableData(
-      id: data.id.present ? data.id.value : this.id,
       sourceId: data.sourceId.present ? data.sourceId.value : this.sourceId,
       name: data.name.present ? data.name.value : this.name,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
@@ -246,7 +211,6 @@ class SourcesTableData extends DataClass
   @override
   String toString() {
     return (StringBuffer('SourcesTableData(')
-          ..write('id: $id, ')
           ..write('sourceId: $sourceId, ')
           ..write('name: $name, ')
           ..write('createdAt: $createdAt, ')
@@ -256,12 +220,11 @@ class SourcesTableData extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(id, sourceId, name, createdAt, updatedAt);
+  int get hashCode => Object.hash(sourceId, name, createdAt, updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is SourcesTableData &&
-          other.id == this.id &&
           other.sourceId == this.sourceId &&
           other.name == this.name &&
           other.createdAt == this.createdAt &&
@@ -269,63 +232,60 @@ class SourcesTableData extends DataClass
 }
 
 class SourcesTableCompanion extends UpdateCompanion<SourcesTableData> {
-  final Value<int> id;
   final Value<String?> sourceId;
   final Value<String?> name;
   final Value<DateTime> createdAt;
   final Value<DateTime?> updatedAt;
+  final Value<int> rowid;
   const SourcesTableCompanion({
-    this.id = const Value.absent(),
     this.sourceId = const Value.absent(),
     this.name = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   SourcesTableCompanion.insert({
-    this.id = const Value.absent(),
     this.sourceId = const Value.absent(),
     this.name = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   static Insertable<SourcesTableData> custom({
-    Expression<int>? id,
     Expression<String>? sourceId,
     Expression<String>? name,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
-      if (id != null) 'id': id,
       if (sourceId != null) 'source_id': sourceId,
       if (name != null) 'name': name,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   SourcesTableCompanion copyWith({
-    Value<int>? id,
     Value<String?>? sourceId,
     Value<String?>? name,
     Value<DateTime>? createdAt,
     Value<DateTime?>? updatedAt,
+    Value<int>? rowid,
   }) {
     return SourcesTableCompanion(
-      id: id ?? this.id,
       sourceId: sourceId ?? this.sourceId,
       name: name ?? this.name,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
     if (sourceId.present) {
       map['source_id'] = Variable<String>(sourceId.value);
     }
@@ -338,17 +298,20 @@ class SourcesTableCompanion extends UpdateCompanion<SourcesTableData> {
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
   @override
   String toString() {
     return (StringBuffer('SourcesTableCompanion(')
-          ..write('id: $id, ')
           ..write('sourceId: $sourceId, ')
           ..write('name: $name, ')
           ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -360,19 +323,6 @@ class $NewsTableTable extends NewsTable
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $NewsTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-    'id',
-    aliasedName,
-    false,
-    hasAutoIncrement: true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
-  );
   static const VerificationMeta _sourceIdMeta = const VerificationMeta(
     'sourceId',
   );
@@ -440,11 +390,11 @@ class $NewsTableTable extends NewsTable
     'publishedAt',
   );
   @override
-  late final GeneratedColumn<String> publishedAt = GeneratedColumn<String>(
+  late final GeneratedColumn<DateTime> publishedAt = GeneratedColumn<DateTime>(
     'published_at',
     aliasedName,
     true,
-    type: DriftSqlType.string,
+    type: DriftSqlType.dateTime,
     requiredDuringInsert: false,
   );
   static const VerificationMeta _contentMeta = const VerificationMeta(
@@ -483,7 +433,6 @@ class $NewsTableTable extends NewsTable
   );
   @override
   List<GeneratedColumn> get $columns => [
-    id,
     sourceId,
     author,
     title,
@@ -507,9 +456,6 @@ class $NewsTableTable extends NewsTable
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
     if (data.containsKey('source_id')) {
       context.handle(
         _sourceIdMeta,
@@ -583,15 +529,11 @@ class $NewsTableTable extends NewsTable
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {url};
   @override
   NewsTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return NewsTableData(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
       sourceId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}source_id'],
@@ -617,7 +559,7 @@ class $NewsTableTable extends NewsTable
         data['${effectivePrefix}url_to_image'],
       ),
       publishedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
+        DriftSqlType.dateTime,
         data['${effectivePrefix}published_at'],
       ),
       content: attachedDatabase.typeMapping.read(
@@ -642,19 +584,17 @@ class $NewsTableTable extends NewsTable
 }
 
 class NewsTableData extends DataClass implements Insertable<NewsTableData> {
-  final int id;
   final String? sourceId;
   final String? author;
   final String? title;
   final String? description;
   final String? url;
   final String? urlToImage;
-  final String? publishedAt;
+  final DateTime? publishedAt;
   final String? content;
   final DateTime createdAt;
   final DateTime? updatedAt;
   const NewsTableData({
-    required this.id,
     this.sourceId,
     this.author,
     this.title,
@@ -669,7 +609,6 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
     if (!nullToAbsent || sourceId != null) {
       map['source_id'] = Variable<String>(sourceId);
     }
@@ -689,7 +628,7 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
       map['url_to_image'] = Variable<String>(urlToImage);
     }
     if (!nullToAbsent || publishedAt != null) {
-      map['published_at'] = Variable<String>(publishedAt);
+      map['published_at'] = Variable<DateTime>(publishedAt);
     }
     if (!nullToAbsent || content != null) {
       map['content'] = Variable<String>(content);
@@ -703,7 +642,6 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
 
   NewsTableCompanion toCompanion(bool nullToAbsent) {
     return NewsTableCompanion(
-      id: Value(id),
       sourceId: sourceId == null && nullToAbsent
           ? const Value.absent()
           : Value(sourceId),
@@ -739,14 +677,13 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return NewsTableData(
-      id: serializer.fromJson<int>(json['id']),
       sourceId: serializer.fromJson<String?>(json['sourceId']),
       author: serializer.fromJson<String?>(json['author']),
       title: serializer.fromJson<String?>(json['title']),
       description: serializer.fromJson<String?>(json['description']),
       url: serializer.fromJson<String?>(json['url']),
       urlToImage: serializer.fromJson<String?>(json['urlToImage']),
-      publishedAt: serializer.fromJson<String?>(json['publishedAt']),
+      publishedAt: serializer.fromJson<DateTime?>(json['publishedAt']),
       content: serializer.fromJson<String?>(json['content']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
@@ -756,14 +693,13 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
       'sourceId': serializer.toJson<String?>(sourceId),
       'author': serializer.toJson<String?>(author),
       'title': serializer.toJson<String?>(title),
       'description': serializer.toJson<String?>(description),
       'url': serializer.toJson<String?>(url),
       'urlToImage': serializer.toJson<String?>(urlToImage),
-      'publishedAt': serializer.toJson<String?>(publishedAt),
+      'publishedAt': serializer.toJson<DateTime?>(publishedAt),
       'content': serializer.toJson<String?>(content),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime?>(updatedAt),
@@ -771,19 +707,17 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
   }
 
   NewsTableData copyWith({
-    int? id,
     Value<String?> sourceId = const Value.absent(),
     Value<String?> author = const Value.absent(),
     Value<String?> title = const Value.absent(),
     Value<String?> description = const Value.absent(),
     Value<String?> url = const Value.absent(),
     Value<String?> urlToImage = const Value.absent(),
-    Value<String?> publishedAt = const Value.absent(),
+    Value<DateTime?> publishedAt = const Value.absent(),
     Value<String?> content = const Value.absent(),
     DateTime? createdAt,
     Value<DateTime?> updatedAt = const Value.absent(),
   }) => NewsTableData(
-    id: id ?? this.id,
     sourceId: sourceId.present ? sourceId.value : this.sourceId,
     author: author.present ? author.value : this.author,
     title: title.present ? title.value : this.title,
@@ -797,7 +731,6 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
   );
   NewsTableData copyWithCompanion(NewsTableCompanion data) {
     return NewsTableData(
-      id: data.id.present ? data.id.value : this.id,
       sourceId: data.sourceId.present ? data.sourceId.value : this.sourceId,
       author: data.author.present ? data.author.value : this.author,
       title: data.title.present ? data.title.value : this.title,
@@ -820,7 +753,6 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
   @override
   String toString() {
     return (StringBuffer('NewsTableData(')
-          ..write('id: $id, ')
           ..write('sourceId: $sourceId, ')
           ..write('author: $author, ')
           ..write('title: $title, ')
@@ -837,7 +769,6 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
 
   @override
   int get hashCode => Object.hash(
-    id,
     sourceId,
     author,
     title,
@@ -853,7 +784,6 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is NewsTableData &&
-          other.id == this.id &&
           other.sourceId == this.sourceId &&
           other.author == this.author &&
           other.title == this.title &&
@@ -867,19 +797,18 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
 }
 
 class NewsTableCompanion extends UpdateCompanion<NewsTableData> {
-  final Value<int> id;
   final Value<String?> sourceId;
   final Value<String?> author;
   final Value<String?> title;
   final Value<String?> description;
   final Value<String?> url;
   final Value<String?> urlToImage;
-  final Value<String?> publishedAt;
+  final Value<DateTime?> publishedAt;
   final Value<String?> content;
   final Value<DateTime> createdAt;
   final Value<DateTime?> updatedAt;
+  final Value<int> rowid;
   const NewsTableCompanion({
-    this.id = const Value.absent(),
     this.sourceId = const Value.absent(),
     this.author = const Value.absent(),
     this.title = const Value.absent(),
@@ -890,9 +819,9 @@ class NewsTableCompanion extends UpdateCompanion<NewsTableData> {
     this.content = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   NewsTableCompanion.insert({
-    this.id = const Value.absent(),
     this.sourceId = const Value.absent(),
     this.author = const Value.absent(),
     this.title = const Value.absent(),
@@ -903,22 +832,22 @@ class NewsTableCompanion extends UpdateCompanion<NewsTableData> {
     this.content = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   static Insertable<NewsTableData> custom({
-    Expression<int>? id,
     Expression<String>? sourceId,
     Expression<String>? author,
     Expression<String>? title,
     Expression<String>? description,
     Expression<String>? url,
     Expression<String>? urlToImage,
-    Expression<String>? publishedAt,
+    Expression<DateTime>? publishedAt,
     Expression<String>? content,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
-      if (id != null) 'id': id,
       if (sourceId != null) 'source_id': sourceId,
       if (author != null) 'author': author,
       if (title != null) 'title': title,
@@ -929,24 +858,24 @@ class NewsTableCompanion extends UpdateCompanion<NewsTableData> {
       if (content != null) 'content': content,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   NewsTableCompanion copyWith({
-    Value<int>? id,
     Value<String?>? sourceId,
     Value<String?>? author,
     Value<String?>? title,
     Value<String?>? description,
     Value<String?>? url,
     Value<String?>? urlToImage,
-    Value<String?>? publishedAt,
+    Value<DateTime?>? publishedAt,
     Value<String?>? content,
     Value<DateTime>? createdAt,
     Value<DateTime?>? updatedAt,
+    Value<int>? rowid,
   }) {
     return NewsTableCompanion(
-      id: id ?? this.id,
       sourceId: sourceId ?? this.sourceId,
       author: author ?? this.author,
       title: title ?? this.title,
@@ -957,15 +886,13 @@ class NewsTableCompanion extends UpdateCompanion<NewsTableData> {
       content: content ?? this.content,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
     if (sourceId.present) {
       map['source_id'] = Variable<String>(sourceId.value);
     }
@@ -985,7 +912,7 @@ class NewsTableCompanion extends UpdateCompanion<NewsTableData> {
       map['url_to_image'] = Variable<String>(urlToImage.value);
     }
     if (publishedAt.present) {
-      map['published_at'] = Variable<String>(publishedAt.value);
+      map['published_at'] = Variable<DateTime>(publishedAt.value);
     }
     if (content.present) {
       map['content'] = Variable<String>(content.value);
@@ -996,13 +923,15 @@ class NewsTableCompanion extends UpdateCompanion<NewsTableData> {
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
   @override
   String toString() {
     return (StringBuffer('NewsTableCompanion(')
-          ..write('id: $id, ')
           ..write('sourceId: $sourceId, ')
           ..write('author: $author, ')
           ..write('title: $title, ')
@@ -1012,7 +941,8 @@ class NewsTableCompanion extends UpdateCompanion<NewsTableData> {
           ..write('publishedAt: $publishedAt, ')
           ..write('content: $content, ')
           ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -1032,19 +962,19 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 
 typedef $$SourcesTableTableCreateCompanionBuilder =
     SourcesTableCompanion Function({
-      Value<int> id,
       Value<String?> sourceId,
       Value<String?> name,
       Value<DateTime> createdAt,
       Value<DateTime?> updatedAt,
+      Value<int> rowid,
     });
 typedef $$SourcesTableTableUpdateCompanionBuilder =
     SourcesTableCompanion Function({
-      Value<int> id,
       Value<String?> sourceId,
       Value<String?> name,
       Value<DateTime> createdAt,
       Value<DateTime?> updatedAt,
+      Value<int> rowid,
     });
 
 final class $$SourcesTableTableReferences
@@ -1082,11 +1012,6 @@ class $$SourcesTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnFilters<String> get sourceId => $composableBuilder(
     column: $table.sourceId,
     builder: (column) => ColumnFilters(column),
@@ -1142,11 +1067,6 @@ class $$SourcesTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<String> get sourceId => $composableBuilder(
     column: $table.sourceId,
     builder: (column) => ColumnOrderings(column),
@@ -1177,9 +1097,6 @@ class $$SourcesTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
   GeneratedColumn<String> get sourceId =>
       $composableBuilder(column: $table.sourceId, builder: (column) => column);
 
@@ -1246,31 +1163,31 @@ class $$SourcesTableTableTableManager
               $$SourcesTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
                 Value<String?> sourceId = const Value.absent(),
                 Value<String?> name = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime?> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => SourcesTableCompanion(
-                id: id,
                 sourceId: sourceId,
                 name: name,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
+                rowid: rowid,
               ),
           createCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
                 Value<String?> sourceId = const Value.absent(),
                 Value<String?> name = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime?> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => SourcesTableCompanion.insert(
-                id: id,
                 sourceId: sourceId,
                 name: name,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
+                rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -1332,31 +1249,31 @@ typedef $$SourcesTableTableProcessedTableManager =
     >;
 typedef $$NewsTableTableCreateCompanionBuilder =
     NewsTableCompanion Function({
-      Value<int> id,
       Value<String?> sourceId,
       Value<String?> author,
       Value<String?> title,
       Value<String?> description,
       Value<String?> url,
       Value<String?> urlToImage,
-      Value<String?> publishedAt,
+      Value<DateTime?> publishedAt,
       Value<String?> content,
       Value<DateTime> createdAt,
       Value<DateTime?> updatedAt,
+      Value<int> rowid,
     });
 typedef $$NewsTableTableUpdateCompanionBuilder =
     NewsTableCompanion Function({
-      Value<int> id,
       Value<String?> sourceId,
       Value<String?> author,
       Value<String?> title,
       Value<String?> description,
       Value<String?> url,
       Value<String?> urlToImage,
-      Value<String?> publishedAt,
+      Value<DateTime?> publishedAt,
       Value<String?> content,
       Value<DateTime> createdAt,
       Value<DateTime?> updatedAt,
+      Value<int> rowid,
     });
 
 final class $$NewsTableTableReferences
@@ -1392,11 +1309,6 @@ class $$NewsTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnFilters<String> get author => $composableBuilder(
     column: $table.author,
     builder: (column) => ColumnFilters(column),
@@ -1422,7 +1334,7 @@ class $$NewsTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get publishedAt => $composableBuilder(
+  ColumnFilters<DateTime> get publishedAt => $composableBuilder(
     column: $table.publishedAt,
     builder: (column) => ColumnFilters(column),
   );
@@ -1475,11 +1387,6 @@ class $$NewsTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<String> get author => $composableBuilder(
     column: $table.author,
     builder: (column) => ColumnOrderings(column),
@@ -1505,7 +1412,7 @@ class $$NewsTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get publishedAt => $composableBuilder(
+  ColumnOrderings<DateTime> get publishedAt => $composableBuilder(
     column: $table.publishedAt,
     builder: (column) => ColumnOrderings(column),
   );
@@ -1558,9 +1465,6 @@ class $$NewsTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
   GeneratedColumn<String> get author =>
       $composableBuilder(column: $table.author, builder: (column) => column);
 
@@ -1580,7 +1484,7 @@ class $$NewsTableTableAnnotationComposer
     builder: (column) => column,
   );
 
-  GeneratedColumn<String> get publishedAt => $composableBuilder(
+  GeneratedColumn<DateTime> get publishedAt => $composableBuilder(
     column: $table.publishedAt,
     builder: (column) => column,
   );
@@ -1646,19 +1550,18 @@ class $$NewsTableTableTableManager
               $$NewsTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
                 Value<String?> sourceId = const Value.absent(),
                 Value<String?> author = const Value.absent(),
                 Value<String?> title = const Value.absent(),
                 Value<String?> description = const Value.absent(),
                 Value<String?> url = const Value.absent(),
                 Value<String?> urlToImage = const Value.absent(),
-                Value<String?> publishedAt = const Value.absent(),
+                Value<DateTime?> publishedAt = const Value.absent(),
                 Value<String?> content = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime?> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => NewsTableCompanion(
-                id: id,
                 sourceId: sourceId,
                 author: author,
                 title: title,
@@ -1669,22 +1572,22 @@ class $$NewsTableTableTableManager
                 content: content,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
+                rowid: rowid,
               ),
           createCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
                 Value<String?> sourceId = const Value.absent(),
                 Value<String?> author = const Value.absent(),
                 Value<String?> title = const Value.absent(),
                 Value<String?> description = const Value.absent(),
                 Value<String?> url = const Value.absent(),
                 Value<String?> urlToImage = const Value.absent(),
-                Value<String?> publishedAt = const Value.absent(),
+                Value<DateTime?> publishedAt = const Value.absent(),
                 Value<String?> content = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime?> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => NewsTableCompanion.insert(
-                id: id,
                 sourceId: sourceId,
                 author: author,
                 title: title,
@@ -1695,6 +1598,7 @@ class $$NewsTableTableTableManager
                 content: content,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
+                rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
               .map(

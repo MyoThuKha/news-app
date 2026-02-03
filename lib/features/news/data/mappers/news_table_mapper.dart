@@ -10,7 +10,7 @@ extension NewsTableMapper on NewsTableData {
       description: description ?? '',
       url: url ?? '',
       urlToImage: urlToImage ?? '',
-      publishedAt: publishedAt ?? '',
+      publishedAt: publishedAt,
       content: content ?? '',
     );
   }

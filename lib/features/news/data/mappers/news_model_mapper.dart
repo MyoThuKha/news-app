@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:news/config/database/app_database.dart';
+import 'package:news/core/utils/date_format_util.dart';
 import 'package:news/features/news/data/mappers/source_mapper.dart';
 import 'package:news/features/news/data/models/models.dart';
 import 'package:news/features/news/domain/entities/entities.dart';
@@ -13,7 +14,7 @@ extension NewsModelMapper on NewsModel {
       description: description ?? '',
       url: url ?? '',
       urlToImage: urlToImage ?? '',
-      publishedAt: publishedAt ?? '',
+      publishedAt: DateFormatUtil.parseUtc(publishedAt),
       content: content ?? '',
     );
   }
@@ -26,7 +27,7 @@ extension NewsModelMapper on NewsModel {
       description: Value(description),
       url: Value(url),
       urlToImage: Value(urlToImage),
-      publishedAt: Value(publishedAt),
+      publishedAt: Value(DateFormatUtil.parseUtc(publishedAt)),
       content: Value(content),
     );
   }

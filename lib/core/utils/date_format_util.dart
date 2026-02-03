@@ -1,8 +1,10 @@
 class DateFormatUtil {
-  static DateTime? parseUtc(String isoString) {
-    if (isoString.isEmpty) return null;
+  const DateFormatUtil._();
 
-    return DateTime.parse(isoString).toUtc();
+  static DateTime? parseUtc(String? isoString) {
+    if (isoString?.isEmpty ?? true) return null;
+
+    return DateTime.parse(isoString!).toUtc();
   }
 
   static String toIsoUtc(DateTime? dateTime) {

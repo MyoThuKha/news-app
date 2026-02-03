@@ -8,10 +8,10 @@ import 'package:news/features/news/domain/repositories/news_repository.dart';
 class NewsRepositoryImpl implements NewsRepository {
   NewsRepositoryImpl({
     required NewsDao newsTable,
-    required SourcesDao sourceTable,
+    required SourcesDao sourcesTable,
     required NewsApiService newsApiService,
   }) : _newsTable = newsTable,
-       _sourcesTable = sourceTable,
+       _sourcesTable = sourcesTable,
        _newsApiService = newsApiService;
 
   late final NewsDao _newsTable;
@@ -26,7 +26,6 @@ class NewsRepositoryImpl implements NewsRepository {
       final List<NewsTableCompanion> newsCompanions = [];
       final List<SourcesTableCompanion> sourcesCompanions = [];
 
-      //
       for (final newsModel in newsModels) {
         String? sourceId = newsModel.source?.identifier;
 

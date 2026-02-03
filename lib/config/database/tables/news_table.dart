@@ -2,8 +2,6 @@ import 'package:drift/drift.dart';
 import 'package:news/config/database/tables/sources_table.dart';
 
 class NewsTable extends Table {
-  IntColumn get id => integer().autoIncrement()();
-
   TextColumn get sourceId =>
       text().references(SourcesTable, #sourceId).nullable()();
   TextColumn get author => text().nullable()();
@@ -11,9 +9,12 @@ class NewsTable extends Table {
   TextColumn get description => text().nullable()();
   TextColumn get url => text().nullable()();
   TextColumn get urlToImage => text().nullable()();
-  TextColumn get publishedAt => text().nullable()();
+  DateTimeColumn get publishedAt => dateTime().nullable()();
   TextColumn get content => text().nullable()();
 
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {url};
 }
