@@ -948,16 +948,242 @@ class NewsTableCompanion extends UpdateCompanion<NewsTableData> {
   }
 }
 
+class $SavesTableTable extends SavesTable
+    with TableInfo<$SavesTableTable, SavesTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SavesTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _newsIdMeta = const VerificationMeta('newsId');
+  @override
+  late final GeneratedColumn<String> newsId = GeneratedColumn<String>(
+    'news_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES news_table (url)',
+    ),
+  );
+  static const VerificationMeta _savedAtMeta = const VerificationMeta(
+    'savedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> savedAt = GeneratedColumn<DateTime>(
+    'saved_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [newsId, savedAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'saves_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SavesTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('news_id')) {
+      context.handle(
+        _newsIdMeta,
+        newsId.isAcceptableOrUnknown(data['news_id']!, _newsIdMeta),
+      );
+    }
+    if (data.containsKey('saved_at')) {
+      context.handle(
+        _savedAtMeta,
+        savedAt.isAcceptableOrUnknown(data['saved_at']!, _savedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => const {};
+  @override
+  SavesTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SavesTableData(
+      newsId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}news_id'],
+      ),
+      savedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}saved_at'],
+      )!,
+    );
+  }
+
+  @override
+  $SavesTableTable createAlias(String alias) {
+    return $SavesTableTable(attachedDatabase, alias);
+  }
+}
+
+class SavesTableData extends DataClass implements Insertable<SavesTableData> {
+  final String? newsId;
+  final DateTime savedAt;
+  const SavesTableData({this.newsId, required this.savedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || newsId != null) {
+      map['news_id'] = Variable<String>(newsId);
+    }
+    map['saved_at'] = Variable<DateTime>(savedAt);
+    return map;
+  }
+
+  SavesTableCompanion toCompanion(bool nullToAbsent) {
+    return SavesTableCompanion(
+      newsId: newsId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(newsId),
+      savedAt: Value(savedAt),
+    );
+  }
+
+  factory SavesTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SavesTableData(
+      newsId: serializer.fromJson<String?>(json['newsId']),
+      savedAt: serializer.fromJson<DateTime>(json['savedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'newsId': serializer.toJson<String?>(newsId),
+      'savedAt': serializer.toJson<DateTime>(savedAt),
+    };
+  }
+
+  SavesTableData copyWith({
+    Value<String?> newsId = const Value.absent(),
+    DateTime? savedAt,
+  }) => SavesTableData(
+    newsId: newsId.present ? newsId.value : this.newsId,
+    savedAt: savedAt ?? this.savedAt,
+  );
+  SavesTableData copyWithCompanion(SavesTableCompanion data) {
+    return SavesTableData(
+      newsId: data.newsId.present ? data.newsId.value : this.newsId,
+      savedAt: data.savedAt.present ? data.savedAt.value : this.savedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SavesTableData(')
+          ..write('newsId: $newsId, ')
+          ..write('savedAt: $savedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(newsId, savedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SavesTableData &&
+          other.newsId == this.newsId &&
+          other.savedAt == this.savedAt);
+}
+
+class SavesTableCompanion extends UpdateCompanion<SavesTableData> {
+  final Value<String?> newsId;
+  final Value<DateTime> savedAt;
+  final Value<int> rowid;
+  const SavesTableCompanion({
+    this.newsId = const Value.absent(),
+    this.savedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SavesTableCompanion.insert({
+    this.newsId = const Value.absent(),
+    this.savedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  static Insertable<SavesTableData> custom({
+    Expression<String>? newsId,
+    Expression<DateTime>? savedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (newsId != null) 'news_id': newsId,
+      if (savedAt != null) 'saved_at': savedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SavesTableCompanion copyWith({
+    Value<String?>? newsId,
+    Value<DateTime>? savedAt,
+    Value<int>? rowid,
+  }) {
+    return SavesTableCompanion(
+      newsId: newsId ?? this.newsId,
+      savedAt: savedAt ?? this.savedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (newsId.present) {
+      map['news_id'] = Variable<String>(newsId.value);
+    }
+    if (savedAt.present) {
+      map['saved_at'] = Variable<DateTime>(savedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SavesTableCompanion(')
+          ..write('newsId: $newsId, ')
+          ..write('savedAt: $savedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $SourcesTableTable sourcesTable = $SourcesTableTable(this);
   late final $NewsTableTable newsTable = $NewsTableTable(this);
+  late final $SavesTableTable savesTable = $SavesTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [sourcesTable, newsTable];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    sourcesTable,
+    newsTable,
+    savesTable,
+  ];
 }
 
 typedef $$SourcesTableTableCreateCompanionBuilder =
@@ -1298,6 +1524,24 @@ final class $$NewsTableTableReferences
       manager.$state.copyWith(prefetchedData: [item]),
     );
   }
+
+  static MultiTypedResultKey<$SavesTableTable, List<SavesTableData>>
+  _savesTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.savesTable,
+    aliasName: $_aliasNameGenerator(db.newsTable.url, db.savesTable.newsId),
+  );
+
+  $$SavesTableTableProcessedTableManager get savesTableRefs {
+    final manager = $$SavesTableTableTableManager(
+      $_db,
+      $_db.savesTable,
+    ).filter((f) => f.newsId.url.sqlEquals($_itemColumn<String>('url')));
+
+    final cache = $_typedResult.readTableOrNull(_savesTableRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$NewsTableTableFilterComposer
@@ -1375,6 +1619,31 @@ class $$NewsTableTableFilterComposer
           ),
     );
     return composer;
+  }
+
+  Expression<bool> savesTableRefs(
+    Expression<bool> Function($$SavesTableTableFilterComposer f) f,
+  ) {
+    final $$SavesTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.url,
+      referencedTable: $db.savesTable,
+      getReferencedColumn: (t) => t.newsId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SavesTableTableFilterComposer(
+            $db: $db,
+            $table: $db.savesTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
   }
 }
 
@@ -1520,6 +1789,31 @@ class $$NewsTableTableAnnotationComposer
     );
     return composer;
   }
+
+  Expression<T> savesTableRefs<T extends Object>(
+    Expression<T> Function($$SavesTableTableAnnotationComposer a) f,
+  ) {
+    final $$SavesTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.url,
+      referencedTable: $db.savesTable,
+      getReferencedColumn: (t) => t.newsId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SavesTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.savesTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$NewsTableTableTableManager
@@ -1535,7 +1829,7 @@ class $$NewsTableTableTableManager
           $$NewsTableTableUpdateCompanionBuilder,
           (NewsTableData, $$NewsTableTableReferences),
           NewsTableData,
-          PrefetchHooks Function({bool sourceId})
+          PrefetchHooks Function({bool sourceId, bool savesTableRefs})
         > {
   $$NewsTableTableTableManager(_$AppDatabase db, $NewsTableTable table)
     : super(
@@ -1608,10 +1902,10 @@ class $$NewsTableTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({sourceId = false}) {
+          prefetchHooksCallback: ({sourceId = false, savesTableRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [],
+              explicitlyWatchedTables: [if (savesTableRefs) db.savesTable],
               addJoins:
                   <
                     T extends TableManagerState<
@@ -1645,7 +1939,27 @@ class $$NewsTableTableTableManager
                     return state;
                   },
               getPrefetchedDataCallback: (items) async {
-                return [];
+                return [
+                  if (savesTableRefs)
+                    await $_getPrefetchedData<
+                      NewsTableData,
+                      $NewsTableTable,
+                      SavesTableData
+                    >(
+                      currentTable: table,
+                      referencedTable: $$NewsTableTableReferences
+                          ._savesTableRefsTable(db),
+                      managerFromTypedResult: (p0) =>
+                          $$NewsTableTableReferences(
+                            db,
+                            table,
+                            p0,
+                          ).savesTableRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where((e) => e.newsId == item.url),
+                      typedResults: items,
+                    ),
+                ];
               },
             );
           },
@@ -1665,7 +1979,269 @@ typedef $$NewsTableTableProcessedTableManager =
       $$NewsTableTableUpdateCompanionBuilder,
       (NewsTableData, $$NewsTableTableReferences),
       NewsTableData,
-      PrefetchHooks Function({bool sourceId})
+      PrefetchHooks Function({bool sourceId, bool savesTableRefs})
+    >;
+typedef $$SavesTableTableCreateCompanionBuilder =
+    SavesTableCompanion Function({
+      Value<String?> newsId,
+      Value<DateTime> savedAt,
+      Value<int> rowid,
+    });
+typedef $$SavesTableTableUpdateCompanionBuilder =
+    SavesTableCompanion Function({
+      Value<String?> newsId,
+      Value<DateTime> savedAt,
+      Value<int> rowid,
+    });
+
+final class $$SavesTableTableReferences
+    extends BaseReferences<_$AppDatabase, $SavesTableTable, SavesTableData> {
+  $$SavesTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $NewsTableTable _newsIdTable(_$AppDatabase db) =>
+      db.newsTable.createAlias(
+        $_aliasNameGenerator(db.savesTable.newsId, db.newsTable.url),
+      );
+
+  $$NewsTableTableProcessedTableManager? get newsId {
+    final $_column = $_itemColumn<String>('news_id');
+    if ($_column == null) return null;
+    final manager = $$NewsTableTableTableManager(
+      $_db,
+      $_db.newsTable,
+    ).filter((f) => f.url.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_newsIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$SavesTableTableFilterComposer
+    extends Composer<_$AppDatabase, $SavesTableTable> {
+  $$SavesTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<DateTime> get savedAt => $composableBuilder(
+    column: $table.savedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$NewsTableTableFilterComposer get newsId {
+    final $$NewsTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.newsId,
+      referencedTable: $db.newsTable,
+      getReferencedColumn: (t) => t.url,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$NewsTableTableFilterComposer(
+            $db: $db,
+            $table: $db.newsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$SavesTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $SavesTableTable> {
+  $$SavesTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<DateTime> get savedAt => $composableBuilder(
+    column: $table.savedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$NewsTableTableOrderingComposer get newsId {
+    final $$NewsTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.newsId,
+      referencedTable: $db.newsTable,
+      getReferencedColumn: (t) => t.url,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$NewsTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.newsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$SavesTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SavesTableTable> {
+  $$SavesTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<DateTime> get savedAt =>
+      $composableBuilder(column: $table.savedAt, builder: (column) => column);
+
+  $$NewsTableTableAnnotationComposer get newsId {
+    final $$NewsTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.newsId,
+      referencedTable: $db.newsTable,
+      getReferencedColumn: (t) => t.url,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$NewsTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.newsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$SavesTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SavesTableTable,
+          SavesTableData,
+          $$SavesTableTableFilterComposer,
+          $$SavesTableTableOrderingComposer,
+          $$SavesTableTableAnnotationComposer,
+          $$SavesTableTableCreateCompanionBuilder,
+          $$SavesTableTableUpdateCompanionBuilder,
+          (SavesTableData, $$SavesTableTableReferences),
+          SavesTableData,
+          PrefetchHooks Function({bool newsId})
+        > {
+  $$SavesTableTableTableManager(_$AppDatabase db, $SavesTableTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SavesTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SavesTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SavesTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String?> newsId = const Value.absent(),
+                Value<DateTime> savedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SavesTableCompanion(
+                newsId: newsId,
+                savedAt: savedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                Value<String?> newsId = const Value.absent(),
+                Value<DateTime> savedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SavesTableCompanion.insert(
+                newsId: newsId,
+                savedAt: savedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$SavesTableTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({newsId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (newsId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.newsId,
+                                referencedTable: $$SavesTableTableReferences
+                                    ._newsIdTable(db),
+                                referencedColumn: $$SavesTableTableReferences
+                                    ._newsIdTable(db)
+                                    .url,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$SavesTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SavesTableTable,
+      SavesTableData,
+      $$SavesTableTableFilterComposer,
+      $$SavesTableTableOrderingComposer,
+      $$SavesTableTableAnnotationComposer,
+      $$SavesTableTableCreateCompanionBuilder,
+      $$SavesTableTableUpdateCompanionBuilder,
+      (SavesTableData, $$SavesTableTableReferences),
+      SavesTableData,
+      PrefetchHooks Function({bool newsId})
     >;
 
 class $AppDatabaseManager {
@@ -1675,4 +2251,6 @@ class $AppDatabaseManager {
       $$SourcesTableTableTableManager(_db, _db.sourcesTable);
   $$NewsTableTableTableManager get newsTable =>
       $$NewsTableTableTableManager(_db, _db.newsTable);
+  $$SavesTableTableTableManager get savesTable =>
+      $$SavesTableTableTableManager(_db, _db.savesTable);
 }
