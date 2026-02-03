@@ -1,3 +1,6 @@
+import 'package:drift/drift.dart';
+import 'package:news/config/database/app_database.dart';
+import 'package:news/features/news/data/mappers/source_mapper.dart';
 import 'package:news/features/news/data/models/models.dart';
 import 'package:news/features/news/domain/entities/entities.dart';
 
@@ -14,10 +17,18 @@ extension NewsModelMapper on NewsModel {
       content: content ?? '',
     );
   }
-}
 
-extension SourceModelMapper on SourceModel {
-  SourceEntity toEntity() {
-    return SourceEntity(id: id ?? '', name: name ?? '');
+  NewsTableCompanion toTableCompanion(String? sourceId) {
+    return NewsTableCompanion(
+      sourceId: Value(sourceId),
+      author: Value(author),
+      title: Value(title),
+      description: Value(description),
+      url: Value(url),
+      urlToImage: Value(urlToImage),
+      publishedAt: Value(publishedAt),
+      content: Value(content),
+    );
   }
 }
+

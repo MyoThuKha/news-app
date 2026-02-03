@@ -1,20 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:news/core/network/network_config.dart';
+import 'package:news/core/constants/api_consts.dart';
 
 class DioClient {
 
-  DioClient({String? baseUrl, String? apiKey}) {
-    _dio = Dio(
-      BaseOptions(
-        baseUrl: baseUrl ?? NetworkConfig.baseUrl,
-        connectTimeout: Duration(milliseconds: NetworkConfig.connectTimeout),
-        receiveTimeout: Duration(milliseconds: NetworkConfig.receiveTimeout),
-        sendTimeout: Duration(milliseconds: NetworkConfig.sendTimeout),
-        headers: Map<String, String>.from(NetworkConfig.headers),
-      ),
-    );
-
-    _setupInterceptors(apiKey);
+  DioClient(Dio dio) : _dio = dio {
+    _setupInterceptors(ApiConstants.apiKey);
   }
 
   late final Dio _dio;
