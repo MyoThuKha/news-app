@@ -12,7 +12,7 @@ abstract class NewsEntity with _$NewsEntity {
     required String description,
     required String url,
     required String urlToImage,
-    required String publishedAt,
+    required DateTime? publishedAt,
     required String content,
   }) = _NewsEntity;
 }

@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$NewsEntity {
 
- SourceEntity get source; String get author; String get title; String get description; String get url; String get urlToImage; String get publishedAt; String get content;
+ SourceEntity get source; String get author; String get title; String get description; String get url; String get urlToImage; DateTime? get publishedAt; String get content;
 /// Create a copy of NewsEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $NewsEntityCopyWith<$Res>  {
   factory $NewsEntityCopyWith(NewsEntity value, $Res Function(NewsEntity) _then) = _$NewsEntityCopyWithImpl;
 @useResult
 $Res call({
- SourceEntity source, String author, String title, String description, String url, String urlToImage, String publishedAt, String content
+ SourceEntity source, String author, String title, String description, String url, String urlToImage, DateTime? publishedAt, String content
 });
 
 
@@ -62,7 +62,7 @@ class _$NewsEntityCopyWithImpl<$Res>
 
 /// Create a copy of NewsEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? source = null,Object? author = null,Object? title = null,Object? description = null,Object? url = null,Object? urlToImage = null,Object? publishedAt = null,Object? content = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? source = null,Object? author = null,Object? title = null,Object? description = null,Object? url = null,Object? urlToImage = null,Object? publishedAt = freezed,Object? content = null,}) {
   return _then(_self.copyWith(
 source: null == source ? _self.source : source // ignore: cast_nullable_to_non_nullable
 as SourceEntity,author: null == author ? _self.author : author // ignore: cast_nullable_to_non_nullable
@@ -70,8 +70,8 @@ as String,title: null == title ? _self.title : title // ignore: cast_nullable_to
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,url: null == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
 as String,urlToImage: null == urlToImage ? _self.urlToImage : urlToImage // ignore: cast_nullable_to_non_nullable
-as String,publishedAt: null == publishedAt ? _self.publishedAt : publishedAt // ignore: cast_nullable_to_non_nullable
-as String,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
+as String,publishedAt: freezed == publishedAt ? _self.publishedAt : publishedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -166,7 +166,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( SourceEntity source,  String author,  String title,  String description,  String url,  String urlToImage,  String publishedAt,  String content)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( SourceEntity source,  String author,  String title,  String description,  String url,  String urlToImage,  DateTime? publishedAt,  String content)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _NewsEntity() when $default != null:
 return $default(_that.source,_that.author,_that.title,_that.description,_that.url,_that.urlToImage,_that.publishedAt,_that.content);case _:
@@ -187,7 +187,7 @@ return $default(_that.source,_that.author,_that.title,_that.description,_that.ur
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( SourceEntity source,  String author,  String title,  String description,  String url,  String urlToImage,  String publishedAt,  String content)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( SourceEntity source,  String author,  String title,  String description,  String url,  String urlToImage,  DateTime? publishedAt,  String content)  $default,) {final _that = this;
 switch (_that) {
 case _NewsEntity():
 return $default(_that.source,_that.author,_that.title,_that.description,_that.url,_that.urlToImage,_that.publishedAt,_that.content);case _:
@@ -207,7 +207,7 @@ return $default(_that.source,_that.author,_that.title,_that.description,_that.ur
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( SourceEntity source,  String author,  String title,  String description,  String url,  String urlToImage,  String publishedAt,  String content)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( SourceEntity source,  String author,  String title,  String description,  String url,  String urlToImage,  DateTime? publishedAt,  String content)?  $default,) {final _that = this;
 switch (_that) {
 case _NewsEntity() when $default != null:
 return $default(_that.source,_that.author,_that.title,_that.description,_that.url,_that.urlToImage,_that.publishedAt,_that.content);case _:
@@ -231,7 +231,7 @@ class _NewsEntity implements NewsEntity {
 @override final  String description;
 @override final  String url;
 @override final  String urlToImage;
-@override final  String publishedAt;
+@override final  DateTime? publishedAt;
 @override final  String content;
 
 /// Create a copy of NewsEntity
@@ -264,7 +264,7 @@ abstract mixin class _$NewsEntityCopyWith<$Res> implements $NewsEntityCopyWith<$
   factory _$NewsEntityCopyWith(_NewsEntity value, $Res Function(_NewsEntity) _then) = __$NewsEntityCopyWithImpl;
 @override @useResult
 $Res call({
- SourceEntity source, String author, String title, String description, String url, String urlToImage, String publishedAt, String content
+ SourceEntity source, String author, String title, String description, String url, String urlToImage, DateTime? publishedAt, String content
 });
 
 
@@ -281,7 +281,7 @@ class __$NewsEntityCopyWithImpl<$Res>
 
 /// Create a copy of NewsEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? source = null,Object? author = null,Object? title = null,Object? description = null,Object? url = null,Object? urlToImage = null,Object? publishedAt = null,Object? content = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? source = null,Object? author = null,Object? title = null,Object? description = null,Object? url = null,Object? urlToImage = null,Object? publishedAt = freezed,Object? content = null,}) {
   return _then(_NewsEntity(
 source: null == source ? _self.source : source // ignore: cast_nullable_to_non_nullable
 as SourceEntity,author: null == author ? _self.author : author // ignore: cast_nullable_to_non_nullable
@@ -289,8 +289,8 @@ as String,title: null == title ? _self.title : title // ignore: cast_nullable_to
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,url: null == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
 as String,urlToImage: null == urlToImage ? _self.urlToImage : urlToImage // ignore: cast_nullable_to_non_nullable
-as String,publishedAt: null == publishedAt ? _self.publishedAt : publishedAt // ignore: cast_nullable_to_non_nullable
-as String,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
+as String,publishedAt: freezed == publishedAt ? _self.publishedAt : publishedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

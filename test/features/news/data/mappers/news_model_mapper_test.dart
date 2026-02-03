@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:news/core/utils/date_format_util.dart';
 import 'package:news/features/news/data/mappers/mappers.dart';
 import 'package:news/features/news/data/models/models.dart';
 import 'package:news/features/news/domain/entities/entities.dart';
@@ -27,7 +28,7 @@ void main() {
   });
 }
 
-const List<NewsEntity> entities = [
+final List<NewsEntity> entities = [
   NewsEntity(
     source: SourceEntity(id: '', name: 'CoinDesk'),
     author: 'Sam Reynolds',
@@ -39,7 +40,7 @@ const List<NewsEntity> entities = [
         'https://www.coindesk.com/markets/2026/02/02/bitcoin-holds-below-usd80-000-as-january-prediction-contracts-miss-liquidation-driven-slide-asia-morning-briefing',
     urlToImage:
         'https://cdn.sanity.io/images/s3y3vcno/production/192d0e325507d6f5a46471e5eddb27d992835f1e-1919x1080.jpg?auto=format&w=960&h=540&crop=focalpoint&fit=clip&q=75&fm=jpg',
-    publishedAt: '2026-02-02T02:38:58Z',
+    publishedAt: DateFormatUtil.parseUtc('2026-02-02T02:38:58Z'),
     content:
         "Welcome to Asia Morning Briefing, a daily summary of top stories during U.S. hours and an overview of market moves and analysis. For a detailed overview of U.S. markets, see CoinDesk's Crypto Daybook… [+3725 chars]",
   ),
@@ -57,7 +58,7 @@ const List<NewsEntity> entities = [
         'https://www.washingtonpost.com/politics/2026/02/01/trump-uae-crypto-world-liberty-financial/',
     urlToImage:
         'https://www.washingtonpost.com/wp-apps/imrs.php?src=https://arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/EGKGACNKZLMUM7MHLLWYITJ7PM.jpg&w=1440',
-    publishedAt: '2026-02-02T02:35:36Z',
+    publishedAt: DateFormatUtil.parseUtc('2026-02-02T02:35:36Z'),
     content:
         'The investment, worth a reported \$500 million, gave Emirati-backed investors a 49 percent stake in World Liberty Financial, a Trump crypto company.\r\nFebruary 1, 2026 at 8:04 p.m. EST39 minutes ago',
   ),
