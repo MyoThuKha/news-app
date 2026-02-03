@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:news/config/routes/routes.dart';
+import 'package:news/injection/injection_container.dart';
 
-void main() {
+void main() async {
+  await initDependencies();
   runApp(const MyApp());
 }
 
@@ -10,9 +13,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'News',
       theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
-      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      routes: routes,
     );
   }
 }
