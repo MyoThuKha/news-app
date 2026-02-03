@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$NewsModel {
 
- SourceModel get source; String get author; String get title; String get description; String get url; String get urlToImage; String get publishedAt; String get content;
+ SourceModel? get source; String? get author; String? get title; String? get description; String? get url; String? get urlToImage; String? get publishedAt; String? get content;
 /// Create a copy of NewsModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,11 +48,11 @@ abstract mixin class $NewsModelCopyWith<$Res>  {
   factory $NewsModelCopyWith(NewsModel value, $Res Function(NewsModel) _then) = _$NewsModelCopyWithImpl;
 @useResult
 $Res call({
- SourceModel source, String author, String title, String description, String url, String urlToImage, String publishedAt, String content
+ SourceModel? source, String? author, String? title, String? description, String? url, String? urlToImage, String? publishedAt, String? content
 });
 
 
-$SourceModelCopyWith<$Res> get source;
+$SourceModelCopyWith<$Res>? get source;
 
 }
 /// @nodoc
@@ -65,26 +65,29 @@ class _$NewsModelCopyWithImpl<$Res>
 
 /// Create a copy of NewsModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? source = null,Object? author = null,Object? title = null,Object? description = null,Object? url = null,Object? urlToImage = null,Object? publishedAt = null,Object? content = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? source = freezed,Object? author = freezed,Object? title = freezed,Object? description = freezed,Object? url = freezed,Object? urlToImage = freezed,Object? publishedAt = freezed,Object? content = freezed,}) {
   return _then(_self.copyWith(
-source: null == source ? _self.source : source // ignore: cast_nullable_to_non_nullable
-as SourceModel,author: null == author ? _self.author : author // ignore: cast_nullable_to_non_nullable
-as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
-as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String,url: null == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
-as String,urlToImage: null == urlToImage ? _self.urlToImage : urlToImage // ignore: cast_nullable_to_non_nullable
-as String,publishedAt: null == publishedAt ? _self.publishedAt : publishedAt // ignore: cast_nullable_to_non_nullable
-as String,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
-as String,
+source: freezed == source ? _self.source : source // ignore: cast_nullable_to_non_nullable
+as SourceModel?,author: freezed == author ? _self.author : author // ignore: cast_nullable_to_non_nullable
+as String?,title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,url: freezed == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
+as String?,urlToImage: freezed == urlToImage ? _self.urlToImage : urlToImage // ignore: cast_nullable_to_non_nullable
+as String?,publishedAt: freezed == publishedAt ? _self.publishedAt : publishedAt // ignore: cast_nullable_to_non_nullable
+as String?,content: freezed == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 /// Create a copy of NewsModel
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$SourceModelCopyWith<$Res> get source {
-  
-  return $SourceModelCopyWith<$Res>(_self.source, (value) {
+$SourceModelCopyWith<$Res>? get source {
+    if (_self.source == null) {
+    return null;
+  }
+
+  return $SourceModelCopyWith<$Res>(_self.source!, (value) {
     return _then(_self.copyWith(source: value));
   });
 }
@@ -169,7 +172,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( SourceModel source,  String author,  String title,  String description,  String url,  String urlToImage,  String publishedAt,  String content)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( SourceModel? source,  String? author,  String? title,  String? description,  String? url,  String? urlToImage,  String? publishedAt,  String? content)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _NewsModel() when $default != null:
 return $default(_that.source,_that.author,_that.title,_that.description,_that.url,_that.urlToImage,_that.publishedAt,_that.content);case _:
@@ -190,7 +193,7 @@ return $default(_that.source,_that.author,_that.title,_that.description,_that.ur
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( SourceModel source,  String author,  String title,  String description,  String url,  String urlToImage,  String publishedAt,  String content)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( SourceModel? source,  String? author,  String? title,  String? description,  String? url,  String? urlToImage,  String? publishedAt,  String? content)  $default,) {final _that = this;
 switch (_that) {
 case _NewsModel():
 return $default(_that.source,_that.author,_that.title,_that.description,_that.url,_that.urlToImage,_that.publishedAt,_that.content);case _:
@@ -210,7 +213,7 @@ return $default(_that.source,_that.author,_that.title,_that.description,_that.ur
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( SourceModel source,  String author,  String title,  String description,  String url,  String urlToImage,  String publishedAt,  String content)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( SourceModel? source,  String? author,  String? title,  String? description,  String? url,  String? urlToImage,  String? publishedAt,  String? content)?  $default,) {final _that = this;
 switch (_that) {
 case _NewsModel() when $default != null:
 return $default(_that.source,_that.author,_that.title,_that.description,_that.url,_that.urlToImage,_that.publishedAt,_that.content);case _:
@@ -228,14 +231,14 @@ class _NewsModel implements NewsModel {
   const _NewsModel({required this.source, required this.author, required this.title, required this.description, required this.url, required this.urlToImage, required this.publishedAt, required this.content});
   factory _NewsModel.fromJson(Map<String, dynamic> json) => _$NewsModelFromJson(json);
 
-@override final  SourceModel source;
-@override final  String author;
-@override final  String title;
-@override final  String description;
-@override final  String url;
-@override final  String urlToImage;
-@override final  String publishedAt;
-@override final  String content;
+@override final  SourceModel? source;
+@override final  String? author;
+@override final  String? title;
+@override final  String? description;
+@override final  String? url;
+@override final  String? urlToImage;
+@override final  String? publishedAt;
+@override final  String? content;
 
 /// Create a copy of NewsModel
 /// with the given fields replaced by the non-null parameter values.
@@ -270,11 +273,11 @@ abstract mixin class _$NewsModelCopyWith<$Res> implements $NewsModelCopyWith<$Re
   factory _$NewsModelCopyWith(_NewsModel value, $Res Function(_NewsModel) _then) = __$NewsModelCopyWithImpl;
 @override @useResult
 $Res call({
- SourceModel source, String author, String title, String description, String url, String urlToImage, String publishedAt, String content
+ SourceModel? source, String? author, String? title, String? description, String? url, String? urlToImage, String? publishedAt, String? content
 });
 
 
-@override $SourceModelCopyWith<$Res> get source;
+@override $SourceModelCopyWith<$Res>? get source;
 
 }
 /// @nodoc
@@ -287,17 +290,17 @@ class __$NewsModelCopyWithImpl<$Res>
 
 /// Create a copy of NewsModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? source = null,Object? author = null,Object? title = null,Object? description = null,Object? url = null,Object? urlToImage = null,Object? publishedAt = null,Object? content = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? source = freezed,Object? author = freezed,Object? title = freezed,Object? description = freezed,Object? url = freezed,Object? urlToImage = freezed,Object? publishedAt = freezed,Object? content = freezed,}) {
   return _then(_NewsModel(
-source: null == source ? _self.source : source // ignore: cast_nullable_to_non_nullable
-as SourceModel,author: null == author ? _self.author : author // ignore: cast_nullable_to_non_nullable
-as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
-as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String,url: null == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
-as String,urlToImage: null == urlToImage ? _self.urlToImage : urlToImage // ignore: cast_nullable_to_non_nullable
-as String,publishedAt: null == publishedAt ? _self.publishedAt : publishedAt // ignore: cast_nullable_to_non_nullable
-as String,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
-as String,
+source: freezed == source ? _self.source : source // ignore: cast_nullable_to_non_nullable
+as SourceModel?,author: freezed == author ? _self.author : author // ignore: cast_nullable_to_non_nullable
+as String?,title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,url: freezed == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
+as String?,urlToImage: freezed == urlToImage ? _self.urlToImage : urlToImage // ignore: cast_nullable_to_non_nullable
+as String?,publishedAt: freezed == publishedAt ? _self.publishedAt : publishedAt // ignore: cast_nullable_to_non_nullable
+as String?,content: freezed == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -305,9 +308,12 @@ as String,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$SourceModelCopyWith<$Res> get source {
-  
-  return $SourceModelCopyWith<$Res>(_self.source, (value) {
+$SourceModelCopyWith<$Res>? get source {
+    if (_self.source == null) {
+    return null;
+  }
+
+  return $SourceModelCopyWith<$Res>(_self.source!, (value) {
     return _then(_self.copyWith(source: value));
   });
 }

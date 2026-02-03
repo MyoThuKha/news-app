@@ -21,12 +21,12 @@ void main() {
     });
 
     test('Sources Data Check', () {
-      expect(newsModels.map((e) => e.source.name), [
+      expect(newsModels.map((e) => e.source?.name), [
         'CoinDesk',
         'The Washington Post',
       ]);
 
-      expect(newsModels.map((e) => e.source.id), [null, 'the-washington-post']);
+      expect(newsModels.map((e) => e.source?.id), [null, 'the-washington-post']);
     });
   });
 }

@@ -8,14 +8,14 @@ part 'news_model.g.dart';
 abstract class NewsModel with _$NewsModel {
   @JsonSerializable(explicitToJson: true)
   const factory NewsModel({
-    required SourceModel source,
-    required String author,
-    required String title,
-    required String description,
-    required String url,
-    required String urlToImage,
-    required String publishedAt,
-    required String content,
+    required SourceModel? source,
+    required String? author,
+    required String? title,
+    required String? description,
+    required String? url,
+    required String? urlToImage,
+    required String? publishedAt,
+    required String? content,
   }) = _NewsModel;
 
   factory NewsModel.fromJson(Map<String, Object?> json) =>

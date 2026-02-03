@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SourceModel {
 
- String? get id; String get name;
+ String? get id; String? get name;
 /// Create a copy of SourceModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $SourceModelCopyWith<$Res>  {
   factory $SourceModelCopyWith(SourceModel value, $Res Function(SourceModel) _then) = _$SourceModelCopyWithImpl;
 @useResult
 $Res call({
- String? id, String name
+ String? id, String? name
 });
 
 
@@ -65,11 +65,11 @@ class _$SourceModelCopyWithImpl<$Res>
 
 /// Create a copy of SourceModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = freezed,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,
+as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -154,7 +154,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String name)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? name)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SourceModel() when $default != null:
 return $default(_that.id,_that.name);case _:
@@ -175,7 +175,7 @@ return $default(_that.id,_that.name);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String name)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? name)  $default,) {final _that = this;
 switch (_that) {
 case _SourceModel():
 return $default(_that.id,_that.name);case _:
@@ -195,7 +195,7 @@ return $default(_that.id,_that.name);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String name)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? name)?  $default,) {final _that = this;
 switch (_that) {
 case _SourceModel() when $default != null:
 return $default(_that.id,_that.name);case _:
@@ -214,7 +214,7 @@ class _SourceModel implements SourceModel {
   factory _SourceModel.fromJson(Map<String, dynamic> json) => _$SourceModelFromJson(json);
 
 @override final  String? id;
-@override final  String name;
+@override final  String? name;
 
 /// Create a copy of SourceModel
 /// with the given fields replaced by the non-null parameter values.
@@ -249,7 +249,7 @@ abstract mixin class _$SourceModelCopyWith<$Res> implements $SourceModelCopyWith
   factory _$SourceModelCopyWith(_SourceModel value, $Res Function(_SourceModel) _then) = __$SourceModelCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String name
+ String? id, String? name
 });
 
 
@@ -266,11 +266,11 @@ class __$SourceModelCopyWithImpl<$Res>
 
 /// Create a copy of SourceModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = freezed,}) {
   return _then(_SourceModel(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,
+as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
