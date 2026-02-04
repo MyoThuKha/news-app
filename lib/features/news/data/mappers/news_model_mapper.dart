@@ -18,6 +18,7 @@ extension NewsModelMapper on NewsModel {
       urlToImage: urlToImage ?? '',
       publishedAt: DateFormatUtil.parseUtc(publishedAt),
       content: content ?? '',
+      cachedAt: null, 
     );
   }
 

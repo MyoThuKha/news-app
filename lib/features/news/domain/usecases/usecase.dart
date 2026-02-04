@@ -15,3 +15,9 @@ class FetchNewsParams {
   final int page;
   final int pageSize;
 }
+
+class FetchNewsDetailParams {
+  const FetchNewsDetailParams({required this.url});
+
+  final String url;
+}

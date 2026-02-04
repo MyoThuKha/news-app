@@ -22,28 +22,31 @@ class NewsTile extends StatelessWidget {
         children: [
 
           // MARK: Leading image
-          CachedNetworkImage(
-            imageUrl: newsData.urlToImage,
-            width: 120,
-            height: .infinity,
-            fit: .cover,
-            placeholder: (context, url) {
-              return ClipRRect(
-                borderRadius: .circular(15),
-                child: ColoredBox(
-                  color: context.colorScheme.secondaryContainer,
-                ),
-              );
-            },
-            imageBuilder: (context, imageProvider) {
-              return Container(
-                decoration: BoxDecoration(
+          Hero(
+            tag: newsData.urlToImage,
+            child: CachedNetworkImage(
+              imageUrl: newsData.urlToImage,
+              width: 120,
+              height: .infinity,
+              fit: .cover,
+              placeholder: (context, url) {
+                return ClipRRect(
                   borderRadius: .circular(15),
-                  color: context.colorScheme.secondaryContainer,
-                  image: DecorationImage(image: imageProvider, fit: .cover),
-                ),
-              );
-            },
+                  child: ColoredBox(
+                    color: context.colorScheme.secondaryContainer,
+                  ),
+                );
+              },
+              imageBuilder: (context, imageProvider) {
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: .circular(15),
+                    color: context.colorScheme.secondaryContainer,
+                    image: DecorationImage(image: imageProvider, fit: .cover),
+                  ),
+                );
+              },
+            ),
           ),
 
           // MARK: Info section
