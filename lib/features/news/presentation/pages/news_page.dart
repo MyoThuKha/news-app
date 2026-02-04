@@ -4,7 +4,9 @@ import 'package:news/core/ui/extensions/context_extensions.dart';
 import 'package:news/features/news/presentation/bloc/news_bloc.dart';
 import 'package:news/features/news/presentation/pages/details_page.dart';
 import 'package:news/features/news/presentation/widgets/widgets.dart';
+import 'package:news/features/theme/presentation/bloc/theme_bloc.dart';
 import 'package:news/injection/injection_container.dart';
+import 'package:news/config/themes/app_theme_mode.dart';
 
 class NewsPage extends StatelessWidget {
   const NewsPage({super.key});
@@ -57,6 +59,12 @@ class _NewsViewState extends State<_NewsView> {
               expandedHeight: 80,
               collapsedHeight: 60,
               pinned: true,
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.brightness_6),
+                  onPressed: () => _showThemePicker(context),
+                ),
+              ],
               flexibleSpace: FlexibleSpaceBar(
                 title: const Text('News'),
                 centerTitle: false,
@@ -171,6 +179,36 @@ class _NewsViewState extends State<_NewsView> {
               },
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  void _showThemePicker(BuildContext context) {
+    final current = context.read<ThemeBloc>().state.themeMode;
+
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: RadioGroup<AppThemeMode>(
+          groupValue: current,
+          onChanged: (m) {
+            if (m != null) {
+              context.read<ThemeBloc>().add(ThemeEvent.themeUpdated(m));
+            }
+            Navigator.of(ctx).pop();
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: AppThemeMode.values.map((mode) {
+              return RadioListTile<AppThemeMode>(
+                title: Text(
+                  mode.name[0].toUpperCase() + mode.name.substring(1),
+                ),
+                value: mode,
+              );
+            }).toList(),
+          ),
         ),
       ),
     );
