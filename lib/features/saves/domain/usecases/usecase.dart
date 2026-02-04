@@ -1,3 +1,5 @@
+import 'package:news/features/news/domain/entities/news/news_entity.dart';
+
 abstract class UseCase<T, Params> {
   Future<T> call(Params params);
 }
@@ -10,14 +12,11 @@ class NoParams {
   const NoParams();
 }
 
-class FetchNewsParams {
-  const FetchNewsParams({required this.page, this.pageSize = 20});
-  final int page;
-  final int pageSize;
+class SaveNewsParams {
+  const SaveNewsParams({required this.news});
+  final NewsEntity news;
 }
-
-class FetchNewsDetailParams {
-  const FetchNewsDetailParams({required this.url});
-
-  final String url;
+class DeleteNewsParams {
+  const DeleteNewsParams({required this.news});
+  final NewsEntity news;
 }
