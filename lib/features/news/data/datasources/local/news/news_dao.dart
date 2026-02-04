@@ -92,10 +92,7 @@ class NewsDao extends DatabaseAccessor<AppDatabase> with _$NewsDaoMixin {
             sourcesTable.sourceId.equalsExp(newsTable.sourceId),
           ),
         ])..orderBy([
-          OrderingTerm(
-            expression: newsTable.publishedAt,
-            mode: OrderingMode.desc,
-          ),
+          OrderingTerm(expression: newsTable.createdAt, mode: OrderingMode.asc),
         ]);
 
     if (limit != null) {

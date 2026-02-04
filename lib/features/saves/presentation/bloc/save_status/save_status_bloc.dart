@@ -61,7 +61,7 @@ class SaveStatusBloc extends Bloc<SavedStatusEvent, SavedStatusState> {
     emit(.updated(isSaved: !isSaved));
   }
 
-    FutureOr<void> _onSaveAdded(
+  FutureOr<void> _onSaveAdded(
     _SaveAdded event,
     Emitter<SavedStatusState> emit,
   ) {
