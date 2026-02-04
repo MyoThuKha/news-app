@@ -61,7 +61,7 @@ class _NewsViewState extends State<_NewsView> {
       body: RefreshIndicator(
         edgeOffset: 100,
         onRefresh: () async {
-          // context.read<NewsBloc>().add(const .newsRefreshed());
+          context.read<NewsBloc>().add(const .newsRefreshed());
           context.read<FeaturedNewsBloc>().add(const .featuredNewsRefreshed());
           await Future.delayed(const Duration(seconds: 1));
         },
@@ -205,7 +205,7 @@ class _NewsViewState extends State<_NewsView> {
               if (index == news.length - 1)
                 Padding(
                   padding: const .all(16),
-                  child: hasReachedMax
+                  child: (hasReachedMax || isCached)
                       ? const Text('No More Articles.')
                       : FilledButton(
                           onPressed: () {
