@@ -54,8 +54,23 @@ class DetailsPage extends StatelessWidget {
   }
 }
 
-class _DetailView extends StatelessWidget {
+class _DetailView extends StatefulWidget {
   const _DetailView();
+
+  @override
+  State<_DetailView> createState() => _DetailViewState();
+}
+
+class _DetailViewState extends State<_DetailView> {
+
+  late final String url;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    url = ModalRoute.of(context)!.settings.arguments as String;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -110,10 +125,12 @@ class _DetailView extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            FilledButton(
-              onPressed: () => _onShare(context),
-              child: const Icon(Icons.share),
-            ),
+
+            if (url.isNotEmpty)
+              FilledButton(
+                onPressed: () => _onShare(context),
+                child: const Icon(Icons.share),
+              ),
           ],
         ),
 
@@ -177,7 +194,6 @@ class _DetailView extends StatelessWidget {
   }
 
   void _onShare(BuildContext context) {
-    final url = ModalRoute.of(context)!.settings.arguments as String;
     final uri = Uri.tryParse(url);
     if (uri == null) {
       ScaffoldMessenger.of(context).showSnackBar(
