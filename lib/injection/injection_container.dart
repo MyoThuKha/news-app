@@ -12,6 +12,7 @@ import 'package:news/features/news/data/repositories/news_repository_impl.dart';
 import 'package:news/features/news/domain/repositories/news_repository.dart';
 import 'package:news/features/news/domain/usecases/usecases.dart';
 import 'package:news/features/news/presentation/bloc/news_bloc.dart';
+import 'package:news/injection/details_injection.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
@@ -78,6 +79,7 @@ Future<void> initDependencies() async {
     ),
   );
 
+    initDetailDeps();
 
 
 }

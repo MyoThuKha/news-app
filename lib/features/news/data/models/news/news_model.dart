@@ -23,22 +23,6 @@ abstract class NewsModel with _$NewsModel {
       _$NewsModelFromJson(json);
 }
 
-extension NewsModelExtension on NewsModel {
-  NewsEntity toEntity() {
-    return NewsEntity(
-      source: source != null
-          ? SourceEntity(id: source!.id ?? '', name: source!.name ?? '')
-          : const .empty(),
-      author: author ?? '',
-      title: title ?? '',
-      description: description ?? '',
-      url: url ?? '',
-      urlToImage: urlToImage ?? '',
-      publishedAt: publishedAt != null ? DateTime.tryParse(publishedAt!) : null,
-      content: content ?? '',
-    );
-  }
-}
 
 extension SourceModelExtension on SourceModel {
   SourceEntity toEntity() {

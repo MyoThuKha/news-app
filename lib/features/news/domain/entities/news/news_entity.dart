@@ -14,5 +14,6 @@ abstract class NewsEntity with _$NewsEntity {
     required String urlToImage,
     required DateTime? publishedAt,
     required String content,
+    required DateTime? cachedAt,
   }) = _NewsEntity;
 }

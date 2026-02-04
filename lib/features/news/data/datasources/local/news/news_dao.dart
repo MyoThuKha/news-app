@@ -20,6 +20,17 @@ class NewsDao extends DatabaseAccessor<AppDatabase> with _$NewsDaoMixin {
     return query.get();
   }
 
+  Stream<NewsTableData> watchNews({required String idendifier}) {
+    final query = select(newsTable)
+      ..where((t) => t.url.equals(idendifier))
+      ..orderBy([
+        (t) => OrderingTerm(expression: t.publishedAt, mode: OrderingMode.desc),
+      ])
+      ..limit(1);
+
+    return query.watchSingle();
+  }
+
   Stream<List<NewsTableData>> watchAllNews({int? limit}) {
     final query = select(newsTable)
       ..orderBy([

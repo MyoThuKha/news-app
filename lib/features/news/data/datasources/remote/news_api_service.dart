@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:news/core/constants/api_consts.dart';
 import 'package:news/core/network/dio_client.dart';
+import 'package:news/features/news/data/mappers/news_model_mapper.dart';
 import 'package:news/features/news/data/models/models.dart';
 import 'package:news/features/news/domain/entities/paged_articles.dart';
 

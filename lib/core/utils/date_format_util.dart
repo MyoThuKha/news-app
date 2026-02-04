@@ -1,5 +1,9 @@
+import 'package:intl/intl.dart';
+
 class DateFormatUtil {
   const DateFormatUtil._();
+
+  static final _formatter = DateFormat('MMM dd, yyyy, HH:mm a');
 
   static DateTime? parseUtc(String? isoString) {
     if (isoString?.isEmpty ?? true) return null;
@@ -12,5 +16,13 @@ class DateFormatUtil {
       return '';
     }
     return dateTime.toUtc().toIso8601String();
+  }
+
+  static String toLocalReadable(DateTime? dateTime) {
+    if (dateTime == null) {
+      return '';
+    }
+
+    return _formatter.format(dateTime.toLocal());
   }
 }

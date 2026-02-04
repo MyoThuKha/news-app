@@ -1,0 +1,142 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news/core/utils/date_format_util.dart';
+import 'package:news/features/news/domain/entities/entities.dart';
+import 'package:news/features/news/presentation/bloc/news_details/news_details_bloc.dart';
+import 'package:news/features/news/presentation/widgets/last_updated_timestamp.dart';
+import 'package:news/injection/injection_container.dart';
+import 'package:news/core/ui/extensions/context_extensions.dart';
+
+class DetailsPage extends StatelessWidget {
+  const DetailsPage({super.key});
+
+  static const String route = '/details';
+
+  @override
+  Widget build(BuildContext context) {
+    final url = ModalRoute.of(context)!.settings.arguments as String;
+
+    return BlocProvider(
+      create: (context) => sl<NewsDetailsBloc>()..add(.detailLoaded(url: url)),
+      child: const _DetailView(),
+    );
+  }
+}
+
+class _DetailView extends StatelessWidget {
+  const _DetailView();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: BlocBuilder<NewsDetailsBloc, NewsDetailsState>(
+        builder: (context, state) {
+          return state.when(
+            initial: () => const Center(child: CircularProgressIndicator()),
+            loading: () => const Center(child: CircularProgressIndicator()),
+            success: (news) => _buildSuccessView(context, news),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildSuccessView(BuildContext context, NewsEntity newsData) {
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          foregroundColor: context.colorScheme.primaryContainer,
+          expandedHeight: 250,
+          flexibleSpace: FlexibleSpaceBar(
+            collapseMode: .parallax,
+            background: Hero(
+              tag: newsData.urlToImage,
+              child: CachedNetworkImage(
+                imageUrl: newsData.urlToImage,
+                fit: BoxFit.cover,
+                color: Colors.black.withValues(alpha: 0.4),
+                colorBlendMode: .darken,
+              ),
+            ),
+          ),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(Icons.favorite),
+            ),
+            const SizedBox(width: 10),
+            FilledButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(Icons.share),
+            ),
+          ],
+        ),
+
+        // MARK: Title
+
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const .all(10),
+            child: Column(
+              spacing: 20,
+              children: [
+                Align(
+                  alignment: .topRight,
+                  child: LastUpdatedTimestamp(timestamp: newsData.cachedAt),
+                ),
+                Text(
+                  newsData.title,
+                  style: context.textTheme.titleLarge?.copyWith(
+                    color: context.colorScheme.onPrimaryContainer,
+                  ),
+                ),
+
+                // MARK: Source and published date
+                Align(
+                  alignment: .centerLeft,
+                  child: Column(
+                    crossAxisAlignment: .start,
+                    children: [
+                      if (newsData.source.name.isNotEmpty)
+                        Text(
+                          newsData.source.name,
+                          style: context.textTheme.labelLarge?.copyWith(
+                            color: context.colorScheme.onSurface,
+                          ),
+                        ),
+                      if (newsData.publishedAt != null)
+                        Text(
+                          DateFormatUtil.toLocalReadable(newsData.publishedAt),
+                          style: context.textTheme.labelSmall?.copyWith(
+                            color: context.colorScheme.onSurface.withValues(
+                              alpha: 0.6,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                
+
+                Text(
+                  newsData.description,
+                  style: context.textTheme.bodyLarge?.copyWith(
+                    height: 2,
+                    color: context.colorScheme.onPrimaryContainer,
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
