@@ -9,3 +9,15 @@ abstract class StreamUseCase<T, Params> {
 class NoParams {
   const NoParams();
 }
+
+class FetchNewsParams {
+  const FetchNewsParams({required this.page, this.pageSize = 20});
+  final int page;
+  final int pageSize;
+}
+
+class FetchNewsDetailParams {
+  const FetchNewsDetailParams({required this.url});
+
+  final String url;
+}

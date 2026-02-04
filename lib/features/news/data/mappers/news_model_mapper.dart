@@ -8,7 +8,9 @@ import 'package:news/features/news/domain/entities/entities.dart';
 extension NewsModelMapper on NewsModel {
   NewsEntity toEntity() {
     return NewsEntity(
-      source: source?.toEntity() ?? SourceEntity(id: '', name: ''),
+      source: source != null
+          ? SourceMapper(source!).toEntity()
+          : const .empty(),
       author: author ?? '',
       title: title ?? '',
       description: description ?? '',
@@ -16,6 +18,7 @@ extension NewsModelMapper on NewsModel {
       urlToImage: urlToImage ?? '',
       publishedAt: DateFormatUtil.parseUtc(publishedAt),
       content: content ?? '',
+      cachedAt: null, 
     );
   }
 
@@ -32,4 +35,3 @@ extension NewsModelMapper on NewsModel {
     );
   }
 }
-

@@ -6,18 +6,21 @@ class DarkTheme implements AppTheme {
   @override
   AppThemeMode get mode => AppThemeMode.dark;
 
+  final ColorScheme _colorScheme = ColorScheme.fromSeed(
+    seedColor: Colors.deepPurple,
+    brightness: Brightness.dark,
+  );
+
   @override
   ThemeData get themeData {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.deepPurple,
-        brightness: Brightness.dark,
-      ),
+      colorScheme: _colorScheme,
       appBarTheme: const AppBarTheme(
         elevation: 0,
         scrolledUnderElevation: 1,
+        centerTitle: false,
       ),
       cardTheme: const CardThemeData(
         elevation: 1,

@@ -87,11 +87,12 @@ extension SourceEntityPatterns on SourceEntity {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _SourceEntity value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _SourceEntity value)?  $default,{TResult Function( _Empty value)?  empty,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _SourceEntity() when $default != null:
-return $default(_that);case _:
+return $default(_that);case _Empty() when empty != null:
+return empty(_that);case _:
   return orElse();
 
 }
@@ -109,11 +110,12 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _SourceEntity value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _SourceEntity value)  $default,{required TResult Function( _Empty value)  empty,}){
 final _that = this;
 switch (_that) {
 case _SourceEntity():
-return $default(_that);case _:
+return $default(_that);case _Empty():
+return empty(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -130,11 +132,12 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _SourceEntity value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _SourceEntity value)?  $default,{TResult? Function( _Empty value)?  empty,}){
 final _that = this;
 switch (_that) {
 case _SourceEntity() when $default != null:
-return $default(_that);case _:
+return $default(_that);case _Empty() when empty != null:
+return empty(_that);case _:
   return null;
 
 }
@@ -151,10 +154,11 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name)?  $default,{TResult Function( String id,  String name)?  empty,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SourceEntity() when $default != null:
-return $default(_that.id,_that.name);case _:
+return $default(_that.id,_that.name);case _Empty() when empty != null:
+return empty(_that.id,_that.name);case _:
   return orElse();
 
 }
@@ -172,10 +176,11 @@ return $default(_that.id,_that.name);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name)  $default,{required TResult Function( String id,  String name)  empty,}) {final _that = this;
 switch (_that) {
 case _SourceEntity():
-return $default(_that.id,_that.name);case _:
+return $default(_that.id,_that.name);case _Empty():
+return empty(_that.id,_that.name);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -192,10 +197,11 @@ return $default(_that.id,_that.name);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name)?  $default,{TResult? Function( String id,  String name)?  empty,}) {final _that = this;
 switch (_that) {
 case _SourceEntity() when $default != null:
-return $default(_that.id,_that.name);case _:
+return $default(_that.id,_that.name);case _Empty() when empty != null:
+return empty(_that.id,_that.name);case _:
   return null;
 
 }
@@ -262,6 +268,74 @@ class __$SourceEntityCopyWithImpl<$Res>
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,}) {
   return _then(_SourceEntity(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _Empty implements SourceEntity {
+  const _Empty({this.id = '', this.name = ''});
+  
+
+@override@JsonKey() final  String id;
+@override@JsonKey() final  String name;
+
+/// Create a copy of SourceEntity
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$EmptyCopyWith<_Empty> get copyWith => __$EmptyCopyWithImpl<_Empty>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Empty&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,id,name);
+
+@override
+String toString() {
+  return 'SourceEntity.empty(id: $id, name: $name)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$EmptyCopyWith<$Res> implements $SourceEntityCopyWith<$Res> {
+  factory _$EmptyCopyWith(_Empty value, $Res Function(_Empty) _then) = __$EmptyCopyWithImpl;
+@override @useResult
+$Res call({
+ String id, String name
+});
+
+
+
+
+}
+/// @nodoc
+class __$EmptyCopyWithImpl<$Res>
+    implements _$EmptyCopyWith<$Res> {
+  __$EmptyCopyWithImpl(this._self, this._then);
+
+  final _Empty _self;
+  final $Res Function(_Empty) _then;
+
+/// Create a copy of SourceEntity
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,}) {
+  return _then(_Empty(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,
