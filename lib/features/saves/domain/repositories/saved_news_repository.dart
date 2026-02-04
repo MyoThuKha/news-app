@@ -5,4 +5,5 @@ abstract class SavedNewsRepository {
   Future<void> saveNews(NewsEntity data);
   Future<void> deleteNews(NewsEntity data);
   Stream<List<SavedNewsEntity>> watchSavedNews();
+  Future<SavedNewsEntity?> getSaveNewsByUrl(String url);
 }

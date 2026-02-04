@@ -7,6 +7,4 @@ class SavedNewsState with _$SavedNewsState {
   const factory SavedNewsState.error(String message) = _Error;
   const factory SavedNewsState.success({required List<SavedNewsEntity> news}) =
       _Success;
-
-  const factory SavedNewsState.updated({required bool isSaved}) = _Updated;
 }

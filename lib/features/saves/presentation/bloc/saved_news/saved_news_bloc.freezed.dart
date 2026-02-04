@@ -55,14 +55,12 @@ extension SavedNewsEventPatterns on SavedNewsEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _SavesLoaded value)?  savesLoaded,TResult Function( _SaveRemoved value)?  saveRemoved,TResult Function( _SaveAdded value)?  saveAdded,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _SavesLoaded value)?  savesLoaded,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _SavesLoaded() when savesLoaded != null:
-return savesLoaded(_that);case _SaveRemoved() when saveRemoved != null:
-return saveRemoved(_that);case _SaveAdded() when saveAdded != null:
-return saveAdded(_that);case _:
+return savesLoaded(_that);case _:
   return orElse();
 
 }
@@ -80,14 +78,12 @@ return saveAdded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _SavesLoaded value)  savesLoaded,required TResult Function( _SaveRemoved value)  saveRemoved,required TResult Function( _SaveAdded value)  saveAdded,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _SavesLoaded value)  savesLoaded,}){
 final _that = this;
 switch (_that) {
 case _Started():
 return started(_that);case _SavesLoaded():
-return savesLoaded(_that);case _SaveRemoved():
-return saveRemoved(_that);case _SaveAdded():
-return saveAdded(_that);case _:
+return savesLoaded(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -104,14 +100,12 @@ return saveAdded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _SavesLoaded value)?  savesLoaded,TResult? Function( _SaveRemoved value)?  saveRemoved,TResult? Function( _SaveAdded value)?  saveAdded,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _SavesLoaded value)?  savesLoaded,}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _SavesLoaded() when savesLoaded != null:
-return savesLoaded(_that);case _SaveRemoved() when saveRemoved != null:
-return saveRemoved(_that);case _SaveAdded() when saveAdded != null:
-return saveAdded(_that);case _:
+return savesLoaded(_that);case _:
   return null;
 
 }
@@ -128,13 +122,11 @@ return saveAdded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function()?  savesLoaded,TResult Function( NewsEntity news)?  saveRemoved,TResult Function( NewsEntity news)?  saveAdded,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function()?  savesLoaded,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _SavesLoaded() when savesLoaded != null:
-return savesLoaded();case _SaveRemoved() when saveRemoved != null:
-return saveRemoved(_that.news);case _SaveAdded() when saveAdded != null:
-return saveAdded(_that.news);case _:
+return savesLoaded();case _:
   return orElse();
 
 }
@@ -152,13 +144,11 @@ return saveAdded(_that.news);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function()  savesLoaded,required TResult Function( NewsEntity news)  saveRemoved,required TResult Function( NewsEntity news)  saveAdded,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function()  savesLoaded,}) {final _that = this;
 switch (_that) {
 case _Started():
 return started();case _SavesLoaded():
-return savesLoaded();case _SaveRemoved():
-return saveRemoved(_that.news);case _SaveAdded():
-return saveAdded(_that.news);case _:
+return savesLoaded();case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -175,13 +165,11 @@ return saveAdded(_that.news);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function()?  savesLoaded,TResult? Function( NewsEntity news)?  saveRemoved,TResult? Function( NewsEntity news)?  saveAdded,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function()?  savesLoaded,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _SavesLoaded() when savesLoaded != null:
-return savesLoaded();case _SaveRemoved() when saveRemoved != null:
-return saveRemoved(_that.news);case _SaveAdded() when saveAdded != null:
-return saveAdded(_that.news);case _:
+return savesLoaded();case _:
   return null;
 
 }
@@ -254,156 +242,6 @@ String toString() {
 
 
 /// @nodoc
-
-
-class _SaveRemoved implements SavedNewsEvent {
-  const _SaveRemoved(this.news);
-  
-
- final  NewsEntity news;
-
-/// Create a copy of SavedNewsEvent
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$SaveRemovedCopyWith<_SaveRemoved> get copyWith => __$SaveRemovedCopyWithImpl<_SaveRemoved>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SaveRemoved&&(identical(other.news, news) || other.news == news));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,news);
-
-@override
-String toString() {
-  return 'SavedNewsEvent.saveRemoved(news: $news)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$SaveRemovedCopyWith<$Res> implements $SavedNewsEventCopyWith<$Res> {
-  factory _$SaveRemovedCopyWith(_SaveRemoved value, $Res Function(_SaveRemoved) _then) = __$SaveRemovedCopyWithImpl;
-@useResult
-$Res call({
- NewsEntity news
-});
-
-
-$NewsEntityCopyWith<$Res> get news;
-
-}
-/// @nodoc
-class __$SaveRemovedCopyWithImpl<$Res>
-    implements _$SaveRemovedCopyWith<$Res> {
-  __$SaveRemovedCopyWithImpl(this._self, this._then);
-
-  final _SaveRemoved _self;
-  final $Res Function(_SaveRemoved) _then;
-
-/// Create a copy of SavedNewsEvent
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? news = null,}) {
-  return _then(_SaveRemoved(
-null == news ? _self.news : news // ignore: cast_nullable_to_non_nullable
-as NewsEntity,
-  ));
-}
-
-/// Create a copy of SavedNewsEvent
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$NewsEntityCopyWith<$Res> get news {
-  
-  return $NewsEntityCopyWith<$Res>(_self.news, (value) {
-    return _then(_self.copyWith(news: value));
-  });
-}
-}
-
-/// @nodoc
-
-
-class _SaveAdded implements SavedNewsEvent {
-  const _SaveAdded(this.news);
-  
-
- final  NewsEntity news;
-
-/// Create a copy of SavedNewsEvent
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$SaveAddedCopyWith<_SaveAdded> get copyWith => __$SaveAddedCopyWithImpl<_SaveAdded>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SaveAdded&&(identical(other.news, news) || other.news == news));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,news);
-
-@override
-String toString() {
-  return 'SavedNewsEvent.saveAdded(news: $news)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$SaveAddedCopyWith<$Res> implements $SavedNewsEventCopyWith<$Res> {
-  factory _$SaveAddedCopyWith(_SaveAdded value, $Res Function(_SaveAdded) _then) = __$SaveAddedCopyWithImpl;
-@useResult
-$Res call({
- NewsEntity news
-});
-
-
-$NewsEntityCopyWith<$Res> get news;
-
-}
-/// @nodoc
-class __$SaveAddedCopyWithImpl<$Res>
-    implements _$SaveAddedCopyWith<$Res> {
-  __$SaveAddedCopyWithImpl(this._self, this._then);
-
-  final _SaveAdded _self;
-  final $Res Function(_SaveAdded) _then;
-
-/// Create a copy of SavedNewsEvent
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? news = null,}) {
-  return _then(_SaveAdded(
-null == news ? _self.news : news // ignore: cast_nullable_to_non_nullable
-as NewsEntity,
-  ));
-}
-
-/// Create a copy of SavedNewsEvent
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$NewsEntityCopyWith<$Res> get news {
-  
-  return $NewsEntityCopyWith<$Res>(_self.news, (value) {
-    return _then(_self.copyWith(news: value));
-  });
-}
-}
-
-/// @nodoc
 mixin _$SavedNewsState {
 
 
@@ -447,15 +285,14 @@ extension SavedNewsStatePatterns on SavedNewsState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Error value)?  error,TResult Function( _Success value)?  success,TResult Function( _Updated value)?  updated,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Error value)?  error,TResult Function( _Success value)?  success,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _Loading() when loading != null:
 return loading(_that);case _Error() when error != null:
 return error(_that);case _Success() when success != null:
-return success(_that);case _Updated() when updated != null:
-return updated(_that);case _:
+return success(_that);case _:
   return orElse();
 
 }
@@ -473,15 +310,14 @@ return updated(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Error value)  error,required TResult Function( _Success value)  success,required TResult Function( _Updated value)  updated,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Error value)  error,required TResult Function( _Success value)  success,}){
 final _that = this;
 switch (_that) {
 case _Initial():
 return initial(_that);case _Loading():
 return loading(_that);case _Error():
 return error(_that);case _Success():
-return success(_that);case _Updated():
-return updated(_that);case _:
+return success(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -498,15 +334,14 @@ return updated(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Error value)?  error,TResult? Function( _Success value)?  success,TResult? Function( _Updated value)?  updated,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Error value)?  error,TResult? Function( _Success value)?  success,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _Loading() when loading != null:
 return loading(_that);case _Error() when error != null:
 return error(_that);case _Success() when success != null:
-return success(_that);case _Updated() when updated != null:
-return updated(_that);case _:
+return success(_that);case _:
   return null;
 
 }
@@ -523,14 +358,13 @@ return updated(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( String message)?  error,TResult Function( List<SavedNewsEntity> news)?  success,TResult Function( bool isSaved)?  updated,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( String message)?  error,TResult Function( List<SavedNewsEntity> news)?  success,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Error() when error != null:
 return error(_that.message);case _Success() when success != null:
-return success(_that.news);case _Updated() when updated != null:
-return updated(_that.isSaved);case _:
+return success(_that.news);case _:
   return orElse();
 
 }
@@ -548,14 +382,13 @@ return updated(_that.isSaved);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( String message)  error,required TResult Function( List<SavedNewsEntity> news)  success,required TResult Function( bool isSaved)  updated,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( String message)  error,required TResult Function( List<SavedNewsEntity> news)  success,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
 return loading();case _Error():
 return error(_that.message);case _Success():
-return success(_that.news);case _Updated():
-return updated(_that.isSaved);case _:
+return success(_that.news);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -572,14 +405,13 @@ return updated(_that.isSaved);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( String message)?  error,TResult? Function( List<SavedNewsEntity> news)?  success,TResult? Function( bool isSaved)?  updated,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( String message)?  error,TResult? Function( List<SavedNewsEntity> news)?  success,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Error() when error != null:
 return error(_that.message);case _Success() when success != null:
-return success(_that.news);case _Updated() when updated != null:
-return updated(_that.isSaved);case _:
+return success(_that.news);case _:
   return null;
 
 }
@@ -783,72 +615,6 @@ class __$SuccessCopyWithImpl<$Res>
   return _then(_Success(
 news: null == news ? _self._news : news // ignore: cast_nullable_to_non_nullable
 as List<SavedNewsEntity>,
-  ));
-}
-
-
-}
-
-/// @nodoc
-
-
-class _Updated implements SavedNewsState {
-  const _Updated({required this.isSaved});
-  
-
- final  bool isSaved;
-
-/// Create a copy of SavedNewsState
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$UpdatedCopyWith<_Updated> get copyWith => __$UpdatedCopyWithImpl<_Updated>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Updated&&(identical(other.isSaved, isSaved) || other.isSaved == isSaved));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,isSaved);
-
-@override
-String toString() {
-  return 'SavedNewsState.updated(isSaved: $isSaved)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$UpdatedCopyWith<$Res> implements $SavedNewsStateCopyWith<$Res> {
-  factory _$UpdatedCopyWith(_Updated value, $Res Function(_Updated) _then) = __$UpdatedCopyWithImpl;
-@useResult
-$Res call({
- bool isSaved
-});
-
-
-
-
-}
-/// @nodoc
-class __$UpdatedCopyWithImpl<$Res>
-    implements _$UpdatedCopyWith<$Res> {
-  __$UpdatedCopyWithImpl(this._self, this._then);
-
-  final _Updated _self;
-  final $Res Function(_Updated) _then;
-
-/// Create a copy of SavedNewsState
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? isSaved = null,}) {
-  return _then(_Updated(
-isSaved: null == isSaved ? _self.isSaved : isSaved // ignore: cast_nullable_to_non_nullable
-as bool,
   ));
 }
 

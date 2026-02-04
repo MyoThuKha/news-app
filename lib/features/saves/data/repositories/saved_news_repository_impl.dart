@@ -27,4 +27,10 @@ class SavedNewsRepositoryImpl implements SavedNewsRepository {
       }).toList();
     });
   }
+  
+  @override
+  Future<SavedNewsEntity?> getSaveNewsByUrl(String url) async {
+    final savedNews = await _savesDao.getSavedNewsByIdentifier(url);
+    return savedNews?.toSavedNewsEntity();
+  }
 }

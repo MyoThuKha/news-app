@@ -20,3 +20,8 @@ class DeleteNewsParams {
   const DeleteNewsParams({required this.news});
   final NewsEntity news;
 }
+class GetSaveStatusParams {
+  const GetSaveStatusParams({required this.url});
+  final String url;
+}
+

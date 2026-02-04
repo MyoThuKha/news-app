@@ -5,7 +5,7 @@ import 'package:news/core/utils/date_format_util.dart';
 import 'package:news/features/news/domain/entities/entities.dart';
 import 'package:news/features/news/presentation/bloc/news_details/news_details_bloc.dart';
 import 'package:news/features/news/presentation/widgets/last_updated_timestamp.dart';
-import 'package:news/features/saves/presentation/bloc/saved_news_bloc.dart';
+import 'package:news/features/saves/presentation/bloc/save_status/save_status_bloc.dart';
 import 'package:news/injection/injection_container.dart';
 import 'package:news/core/ui/extensions/context_extensions.dart';
 import 'package:share_plus/share_plus.dart';
@@ -20,15 +20,20 @@ class DetailsPage extends StatelessWidget {
     final url = ModalRoute.of(context)!.settings.arguments as String;
 
     return MultiBlocProvider(
-      // create: (context) => sl<NewsDetailsBloc>()..add(.detailLoaded(url: url)),
       providers: [
         BlocProvider(
           create: (context) =>
               sl<NewsDetailsBloc>()..add(.detailLoaded(url: url)),
         ),
-        BlocProvider(create: (context) => sl<SavedNewsBloc>()),
+        BlocProvider(
+          create: (context) {
+            return sl<SaveStatusBloc>()..add(.saveStatusLoaded(url: url));
+          }
+        ),
       ],
-      child: BlocListener<SavedNewsBloc, SavedNewsState>(
+      child: BlocListener<SaveStatusBloc, SavedStatusState>(
+        listenWhen: (previous, current) =>
+            current.maybeWhen(updated: (_) => true, orElse: () => false),
         listener: (context, state) {
           state.maybeWhen(
             updated: (isSaved) {
@@ -88,17 +93,18 @@ class _DetailView extends StatelessWidget {
           actions: [
             FilledButton(
               onPressed: () {
-                context.read<SavedNewsBloc>().add(.saveAdded(newsData));
+                context.read<SaveStatusBloc>().add(.saveAdded(newsData));
               },
-              child: BlocBuilder<SavedNewsBloc, SavedNewsState>(
+              child: BlocBuilder<SaveStatusBloc, SavedStatusState>(
                 builder: (context, state) {
+
+                  const savedIcon = Icon(Icons.favorite);
+                  const notSavedIcon = Icon(Icons.favorite_border);
+
                   return state.maybeWhen(
-                    updated: (isSaved) {
-                      return isSaved
-                          ? const Icon(Icons.favorite)
-                          : const Icon(Icons.favorite_border);
-                    },
-                    orElse: () => const Icon(Icons.favorite_border),
+                    success: (isSaved) => isSaved ? savedIcon : notSavedIcon,
+                    updated: (isSaved) => isSaved ? savedIcon : notSavedIcon,
+                    orElse: () => notSavedIcon,
                   );
                 },
               ),

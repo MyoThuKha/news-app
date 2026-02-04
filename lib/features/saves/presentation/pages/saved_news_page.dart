@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news/core/ui/extensions/context_extensions.dart';
 import 'package:news/features/news/presentation/pages/details_page.dart';
 import 'package:news/features/saves/domain/entities/saved_news_entity.dart';
-import 'package:news/features/saves/presentation/bloc/saved_news_bloc.dart';
+import 'package:news/features/saves/presentation/bloc/saved_news/saved_news_bloc.dart';
 import 'package:news/features/saves/presentation/widgets/saved_news_tile.dart';
 import 'package:news/injection/injection_container.dart';
 

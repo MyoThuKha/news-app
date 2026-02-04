@@ -17,6 +17,44 @@ class SavesDao extends DatabaseAccessor<AppDatabase> with _$SavesDaoMixin {
     return delete(savesTable).delete(news);
   }
 
+
+  Future<SavedNewsWithSource?> getSavedNewsByIdentifier(
+    String identifier,
+  ) async {
+    final query =
+        select(savesTable).join([
+            innerJoin(newsTable, newsTable.url.equalsExp(savesTable.newsId)),
+            leftOuterJoin(
+              sourcesTable,
+              sourcesTable.sourceId.equalsExp(newsTable.sourceId),
+            ),
+          ])
+          ..where(savesTable.newsId.equals(identifier))
+          ..orderBy([
+            OrderingTerm(
+              expression: savesTable.savedAt,
+              mode: OrderingMode.desc,
+            ),
+          ])
+          ..limit(1);
+
+    final row = await query.getSingleOrNull();
+
+    if (row == null) return null;
+
+    final saved = row.readTable(savesTable);
+    final news = row.readTable(newsTable);
+    final source = row.readTableOrNull(sourcesTable);
+
+    return SavedNewsWithSource(
+      news: news,
+      source: source,
+      savedAt: saved.savedAt,
+    );
+  }
+
+
+
   Stream<List<SavedNewsWithSource>> watchSavedNews() {
     final query =
         select(savesTable).join([
