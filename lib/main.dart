@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news/config/routes/routes.dart';
 import 'package:news/config/themes/light_theme.dart';
-import 'package:news/features/news/presentation/pages/news_page.dart';
+import 'package:news/features/presentation/home/home_page.dart';
 import 'package:news/injection/injection_container.dart';
 
 void main() async {
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'News',
       theme: LightTheme().themeData,
-      initialRoute: NewsPage.route,
+      initialRoute: HomePage.route,
       routes: routes,
     );
   }

@@ -5,6 +5,7 @@ import 'package:news/core/utils/date_format_util.dart';
 import 'package:news/features/news/domain/entities/entities.dart';
 import 'package:news/features/news/presentation/bloc/news_details/news_details_bloc.dart';
 import 'package:news/features/news/presentation/widgets/last_updated_timestamp.dart';
+import 'package:news/features/saves/presentation/bloc/saved_news_bloc.dart';
 import 'package:news/injection/injection_container.dart';
 import 'package:news/core/ui/extensions/context_extensions.dart';
 
@@ -17,9 +18,32 @@ class DetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final url = ModalRoute.of(context)!.settings.arguments as String;
 
-    return BlocProvider(
-      create: (context) => sl<NewsDetailsBloc>()..add(.detailLoaded(url: url)),
-      child: const _DetailView(),
+    return MultiBlocProvider(
+      // create: (context) => sl<NewsDetailsBloc>()..add(.detailLoaded(url: url)),
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              sl<NewsDetailsBloc>()..add(.detailLoaded(url: url)),
+        ),
+        BlocProvider(create: (context) => sl<SavedNewsBloc>()),
+      ],
+      child: BlocListener<SavedNewsBloc, SavedNewsState>(
+        listener: (context, state) {
+          state.maybeWhen(
+            updated: (isSaved) {
+              final message = isSaved
+                  ? 'Saved to favorites'
+                  : 'Removed from favorites';
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(message)));
+            },
+            orElse: () {},
+          );
+          // show snackbar
+        },
+        child: const _DetailView(),
+      ),
     );
   }
 }
@@ -63,7 +87,7 @@ class _DetailView extends StatelessWidget {
           actions: [
             FilledButton(
               onPressed: () {
-                Navigator.pop(context);
+                context.read<SavedNewsBloc>().add(.saveAdded(newsData));
               },
               child: const Icon(Icons.favorite),
             ),
@@ -78,7 +102,6 @@ class _DetailView extends StatelessWidget {
         ),
 
         // MARK: Title
-
         SliverToBoxAdapter(
           child: Padding(
             padding: const .all(10),
@@ -121,7 +144,6 @@ class _DetailView extends StatelessWidget {
                     ],
                   ),
                 ),
-                
 
                 Text(
                   newsData.description,
@@ -130,7 +152,6 @@ class _DetailView extends StatelessWidget {
                     color: context.colorScheme.onPrimaryContainer,
                   ),
                 ),
-
               ],
             ),
           ),
@@ -139,4 +160,3 @@ class _DetailView extends StatelessWidget {
     );
   }
 }
-
