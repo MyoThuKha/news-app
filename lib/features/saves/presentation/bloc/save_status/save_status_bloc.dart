@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:news/features/news/domain/entities/news/news_entity.dart';
+import 'package:news/core/domain/entities/news/news_entity.dart';
 import 'package:news/features/saves/domain/usecases/usecases.dart';
 
 part 'save_status_event.dart';

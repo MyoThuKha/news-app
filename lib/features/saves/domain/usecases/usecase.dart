@@ -1,4 +1,4 @@
-import 'package:news/features/news/domain/entities/news/news_entity.dart';
+import 'package:news/core/domain/entities/news/news_entity.dart';
 
 abstract class UseCase<T, Params> {
   Future<T> call(Params params);

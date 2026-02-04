@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news/core/ui/extensions/context_extensions.dart';
 import 'package:news/core/ui/widgets/no_data_widget.dart';
-import 'package:news/features/news/domain/entities/news/news_entity.dart';
+import 'package:news/core/domain/entities/news/news_entity.dart';
 import 'package:news/features/news/presentation/bloc/featured_news/featured_news_bloc.dart';
 import 'package:news/features/news/presentation/bloc/news/news_bloc.dart';
 import 'package:news/features/news/presentation/pages/details_page.dart';

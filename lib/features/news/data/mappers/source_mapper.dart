@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:news/config/database/app_database.dart';
 import 'package:news/features/news/data/models/source/source_model.dart';
-import 'package:news/features/news/domain/entities/source/source_entity.dart';
+import 'package:news/core/domain/entities/source/source_entity.dart';
 
 extension SourceMapper on SourceModel {
   String get identifier {
