@@ -123,6 +123,7 @@ class _DetailView extends StatelessWidget {
             padding: const .all(10),
             child: Column(
               spacing: 20,
+              crossAxisAlignment: .start,
               children: [
                 Align(
                   alignment: .topRight,
@@ -136,33 +137,39 @@ class _DetailView extends StatelessWidget {
                 ),
 
                 // MARK: Source and published date
-                Align(
-                  alignment: .centerLeft,
-                  child: Column(
-                    crossAxisAlignment: .start,
-                    children: [
-                      if (newsData.source.name.isNotEmpty)
-                        Text(
-                          newsData.source.name,
-                          style: context.textTheme.labelLarge?.copyWith(
-                            color: context.colorScheme.onSurface,
+                Column(
+                  crossAxisAlignment: .start,
+                  children: [
+                    if (newsData.source.name.isNotEmpty)
+                      Text(
+                        newsData.source.name,
+                        style: context.textTheme.labelLarge?.copyWith(
+                          color: context.colorScheme.onSurface,
+                        ),
+                      ),
+                    if (newsData.publishedAt != null)
+                      Text(
+                        DateFormatUtil.toLocalReadable(newsData.publishedAt),
+                        style: context.textTheme.labelSmall?.copyWith(
+                          color: context.colorScheme.onSurface.withValues(
+                            alpha: 0.6,
                           ),
                         ),
-                      if (newsData.publishedAt != null)
-                        Text(
-                          DateFormatUtil.toLocalReadable(newsData.publishedAt),
-                          style: context.textTheme.labelSmall?.copyWith(
-                            color: context.colorScheme.onSurface.withValues(
-                              alpha: 0.6,
-                            ),
-                          ),
-                        ),
-                    ],
+                      ),
+                  ],
+                ),
+
+                // MARK: Description
+                Text(
+                  newsData.description,
+                  style: context.textTheme.bodyLarge?.copyWith(
+                    height: 2,
+                    color: context.colorScheme.onPrimaryContainer,
                   ),
                 ),
 
                 Text(
-                  newsData.description,
+                  newsData.content,
                   style: context.textTheme.bodyLarge?.copyWith(
                     height: 2,
                     color: context.colorScheme.onPrimaryContainer,
