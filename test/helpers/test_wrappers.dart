@@ -24,9 +24,6 @@ class TestAppWrapper extends StatelessWidget {
 
 /// Test wrapper with custom theme data
 class TestThemedWrapper extends StatelessWidget {
-  final Widget child;
-  final ThemeData? theme;
-  final ThemeData? darkTheme;
 
   const TestThemedWrapper({
     super.key,
@@ -34,6 +31,9 @@ class TestThemedWrapper extends StatelessWidget {
     this.theme,
     this.darkTheme,
   });
+  final Widget child;
+  final ThemeData? theme;
+  final ThemeData? darkTheme;
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +47,9 @@ class TestThemedWrapper extends StatelessWidget {
 
 /// Simple wrapper without Scaffold for widgets that provide their own scaffold
 class TestPlainWrapper extends StatelessWidget {
-  final Widget child;
 
   const TestPlainWrapper({super.key, required this.child});
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {

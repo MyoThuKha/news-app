@@ -221,7 +221,7 @@ void main() {
       expect(heroWidget, findsOneWidget);
 
       final heroChild = tester.widget<Hero>(heroWidget);
-      expect(heroWidget, isNotNull);
+      expect(heroChild, isNotNull);
     });
 
     testWidgets('expands info section correctly', (tester) async {

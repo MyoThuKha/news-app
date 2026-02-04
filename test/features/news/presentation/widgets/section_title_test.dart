@@ -22,7 +22,7 @@ void main() {
         const TestAppWrapper(child: SectionTitle(title: testTitle)),
       );
 
-      final textWidget = tester.widget<Text>(find.text(testTitle));
+      final _ = tester.widget<Text>(find.text(testTitle));
       final paddingWidget = tester.widget<Padding>(
         find.ancestor(of: find.text(testTitle), matching: find.byType(Padding)),
       );
