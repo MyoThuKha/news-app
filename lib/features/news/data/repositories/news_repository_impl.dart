@@ -103,8 +103,9 @@ class NewsRepositoryImpl implements NewsRepository {
   }
 
   @override
-  Stream<NewsEntity> getFeaturedNews() {
+  Stream<NewsEntity?> getFeaturedNews() {
     return _newsTable.watchFeaturedNews().map((news) {
+      if (news == null) return null;
       return news.toEntity();
     });
   }

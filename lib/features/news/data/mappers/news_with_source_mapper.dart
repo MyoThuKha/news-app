@@ -14,6 +14,7 @@ extension NewsWithSourceMapper on NewsWithSource {
       publishedAt: news.publishedAt,
       content: news.content ?? '',
       cachedAt: news.createdAt,
+      isFeatured: news.isFeatured,
     );
   }
 }

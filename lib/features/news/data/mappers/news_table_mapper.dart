@@ -13,6 +13,7 @@ extension NewsTableMapper on NewsTableData {
       publishedAt: publishedAt,
       content: content ?? '',
       cachedAt: createdAt,
+      isFeatured: isFeatured,
     );
   }
 }

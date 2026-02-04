@@ -34,12 +34,14 @@ class NewsDao extends DatabaseAccessor<AppDatabase> with _$NewsDaoMixin {
     });
   }
 
-  Stream<NewsWithSource> watchFeaturedNews() {
+  Stream<NewsWithSource?> watchFeaturedNews() {
     final baseQuery = select(newsTable)
       ..where((t) => t.isFeatured.equals(true))
       ..orderBy([
         (t) => OrderingTerm(expression: t.publishedAt, mode: OrderingMode.desc),
-      ]);
+      ])
+      ..limit(1);
+      
 
     final joined = baseQuery.join([
       leftOuterJoin(
@@ -48,7 +50,9 @@ class NewsDao extends DatabaseAccessor<AppDatabase> with _$NewsDaoMixin {
       ),
     ]);
 
-    return joined.watchSingle().map((row) {
+    return joined.watchSingleOrNull().map((row) {
+      if (row == null) return null;
+
       final news = row.readTable(newsTable);
       final source = row.readTableOrNull(sourcesTable);
 
@@ -78,8 +82,11 @@ class NewsDao extends DatabaseAccessor<AppDatabase> with _$NewsDaoMixin {
   }
 
   Stream<List<NewsWithSource>> watchAllNews({int? limit}) {
+    final baseQuery = select(newsTable)
+      ..where((t) => t.isFeatured.equals(false));
+
     final query =
-        select(newsTable).join([
+        baseQuery.join([
           leftOuterJoin(
             sourcesTable,
             sourcesTable.sourceId.equalsExp(newsTable.sourceId),

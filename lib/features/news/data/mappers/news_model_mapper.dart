@@ -6,7 +6,7 @@ import 'package:news/features/news/data/models/models.dart';
 import 'package:news/features/news/domain/entities/entities.dart';
 
 extension NewsModelMapper on NewsModel {
-  NewsEntity toEntity() {
+  NewsEntity toEntity({bool isFeatured = false}) {
     return NewsEntity(
       source: source != null
           ? SourceMapper(source!).toEntity()
@@ -19,6 +19,7 @@ extension NewsModelMapper on NewsModel {
       publishedAt: DateFormatUtil.parseUtc(publishedAt),
       content: content ?? '',
       cachedAt: null,
+      isFeatured: isFeatured,
     );
   }
 
