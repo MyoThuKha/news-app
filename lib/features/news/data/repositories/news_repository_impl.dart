@@ -79,18 +79,14 @@ class NewsRepositoryImpl implements NewsRepository {
   @override
   Stream<List<NewsEntity>> getNews() {
     return _newsTable.watchAllNews().map((newsList) {
-      return newsList.map((newsTableData) {
-        final source = SourceEntity(id: '', name: '');
-        return newsTableData.toEntity(source);
-      }).toList();
+      return newsList.map((news) => news.toEntity()).toList();
     });
   }
-  
+
   @override
   Stream<NewsEntity> getNewsDetail(String url) {
-    return _newsTable.watchNews(idendifier: url).map((news) {
-      final source = SourceEntity(id: '', name: '');
-      return news.toEntity(source);
+    return _newsTable.watchNewsWithSource(identifier: url).map((news) {
+      return news.toEntity();
     });
   }
 }

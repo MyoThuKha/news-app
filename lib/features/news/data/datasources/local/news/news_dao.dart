@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:news/config/database/app_database.dart';
 import 'package:news/config/database/tables/tables.dart';
+import 'package:news/features/news/data/models/models.dart';
 
 part 'news_dao.g.dart';
 
@@ -8,7 +9,6 @@ part 'news_dao.g.dart';
 class NewsDao extends DatabaseAccessor<AppDatabase> with _$NewsDaoMixin {
   NewsDao(super.attachedDatabase);
 
-  // MARK: News operations
   Future<List<NewsTableData>> getAllNews({int? limit}) {
     final query = select(newsTable)
       ..orderBy([
@@ -31,14 +31,52 @@ class NewsDao extends DatabaseAccessor<AppDatabase> with _$NewsDaoMixin {
     return query.watchSingle();
   }
 
-  Stream<List<NewsTableData>> watchAllNews({int? limit}) {
-    final query = select(newsTable)
-      ..orderBy([
-        (t) => OrderingTerm(expression: t.publishedAt, mode: OrderingMode.desc),
-      ]);
+  Stream<NewsWithSource> watchNewsWithSource({required String identifier}) {
+    final baseQuery = select(newsTable)
+      ..where((t) => t.url.equals(identifier))
+      ..limit(1);
 
-    if (limit != null) query.limit(limit);
-    return query.watch();
+    final joined = baseQuery.join([
+      leftOuterJoin(
+        sourcesTable,
+        sourcesTable.sourceId.equalsExp(newsTable.sourceId),
+      ),
+    ]);
+
+    return joined.watchSingle().map((row) {
+      final news = row.readTable(newsTable);
+      final source = row.readTableOrNull(sourcesTable);
+
+      return NewsWithSource(news: news, source: source);
+    });
+  }
+
+  Stream<List<NewsWithSource>> watchAllNews({int? limit}) {
+    final query =
+        select(newsTable).join([
+          leftOuterJoin(
+            sourcesTable,
+            sourcesTable.sourceId.equalsExp(newsTable.sourceId),
+          ),
+        ])..orderBy([
+          OrderingTerm(
+            expression: newsTable.publishedAt,
+            mode: OrderingMode.desc,
+          ),
+        ]);
+
+    if (limit != null) {
+      query.limit(limit);
+    }
+
+    return query.watch().map((rows) {
+      return rows.map((row) {
+        final news = row.readTable(newsTable);
+        final source = row.readTableOrNull(sourcesTable);
+
+        return NewsWithSource(news: news, source: source);
+      }).toList();
+    });
   }
 
   Future<void> insertNews(NewsTableData news) async {
@@ -56,34 +94,4 @@ class NewsDao extends DatabaseAccessor<AppDatabase> with _$NewsDaoMixin {
   Future<void> clearAllNews() async {
     await delete(newsTable).go();
   }
-
-  // MARK: Sources operations
-  Future<List<SourcesTableData>> getAllSources() {
-    return (select(
-      sourcesTable,
-    )..orderBy([(t) => OrderingTerm(expression: t.name)])).get();
-  }
-
-  Stream<List<SourcesTableData>> watchAllSources() {
-    return (select(
-      sourcesTable,
-    )..orderBy([(t) => OrderingTerm(expression: t.name)])).watch();
-  }
-
-  Future<int> insertSource(SourcesTableCompanion source) async {
-    return await into(sourcesTable).insertOnConflictUpdate(source);
-  }
-
-  Future<void> insertBulkSources(List<SourcesTableCompanion> sourcesList) async {
-    await transaction(() async {
-      for (final source in sourcesList) {
-        await into(sourcesTable).insertOnConflictUpdate(source);
-      }
-    });
-  }
-
-  Future<void> clearAllSources() async {
-    await delete(sourcesTable).go();
-  }
-
 }
