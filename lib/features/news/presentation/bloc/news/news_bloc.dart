@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:news/features/news/domain/entities/entities.dart';
@@ -27,8 +29,21 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
   void _newsRefreshed(_NewsRefreshed event, Emitter<NewsState> emit) async {
     _page = 1;
-    // emit(const .loading());
-    await _fetchNewsUseCase.call(FetchNewsParams(page: _page));
+    bool isCached = false;
+    try {
+      await _fetchNewsUseCase.call(FetchNewsParams(page: _page));
+    } catch (e) {
+      isCached = true;
+    }
+
+    state.maybeWhen(
+      orElse: () {},
+      success: (news, _, _, _) {
+        emit(.success(news: news, isCached: isCached));
+      },
+    );
+
+    event.refreshCompleter?.complete();
   }
 
   void _newsLoadMore(_NewsLoadMore event, Emitter<NewsState> emit) async {

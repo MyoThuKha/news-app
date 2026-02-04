@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news/core/ui/extensions/context_extensions.dart';
@@ -63,9 +64,11 @@ class _NewsViewState extends State<_NewsView> {
       body: RefreshIndicator(
         edgeOffset: 100,
         onRefresh: () async {
-          context.read<NewsBloc>().add(const .newsRefreshed());
-          context.read<FeaturedNewsBloc>().add(const .featuredNewsRefreshed());
-          await Future.delayed(const Duration(seconds: 1));
+          final refreshCompleter = Completer<void>();
+          context.read<NewsBloc>().add(
+            .newsRefreshed(refreshCompleter: refreshCompleter),
+          );
+          return refreshCompleter.future;
         },
         child: CustomScrollView(
           slivers: [
@@ -87,8 +90,10 @@ class _NewsViewState extends State<_NewsView> {
                 builder: (context, state) {
                   return state.maybeWhen(
                     orElse: () => const SizedBox.shrink(),
-                    success: (_, _, _, isCached) {
-                      if (!isCached) return const SizedBox.shrink();
+                    success: (news, _, _, isCached) {
+                      if (!isCached || news.isEmpty) {
+                        return const SizedBox.shrink();
+                      }
 
                       return Container(
                         padding: .all(15),
