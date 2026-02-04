@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news/core/ui/extensions/context_extensions.dart';
 import 'package:news/core/ui/widgets/no_data_widget.dart';
 import 'package:news/features/news/domain/entities/news/news_entity.dart';
+import 'package:news/features/news/presentation/bloc/featured_news/featured_news_bloc.dart';
 import 'package:news/features/news/presentation/bloc/news_bloc.dart';
 import 'package:news/features/news/presentation/pages/details_page.dart';
 import 'package:news/features/news/presentation/widgets/widgets.dart';
@@ -17,8 +18,16 @@ class NewsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => sl<NewsBloc>()..add(const .newsLoaded()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => sl<NewsBloc>()..add(const .newsLoaded()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              sl<FeaturedNewsBloc>()..add(const .featuredNewsLoaded()),
+        ),
+      ],
       child: const _NewsView(),
     );
   }
@@ -52,7 +61,8 @@ class _NewsViewState extends State<_NewsView> {
       body: RefreshIndicator(
         edgeOffset: 100,
         onRefresh: () async {
-          context.read<NewsBloc>().add(const .newsRefreshed());
+          // context.read<NewsBloc>().add(const .newsRefreshed());
+          context.read<FeaturedNewsBloc>().add(const .featuredNewsRefreshed());
           await Future.delayed(const Duration(seconds: 1));
         },
         child: CustomScrollView(
@@ -61,17 +71,13 @@ class _NewsViewState extends State<_NewsView> {
               expandedHeight: 80,
               collapsedHeight: 60,
               pinned: true,
+              title: const Text('News'),
               actions: [
                 IconButton(
                   icon: const Icon(Icons.brightness_6),
                   onPressed: () => _showThemePicker(context),
                 ),
               ],
-              flexibleSpace: FlexibleSpaceBar(
-                title: const Text('News'),
-                centerTitle: false,
-                titlePadding: const .only(left: 20),
-              ),
             ),
 
             PinnedHeaderSliver(
@@ -100,27 +106,19 @@ class _NewsViewState extends State<_NewsView> {
             ),
 
             SliverToBoxAdapter(
-              child: BlocBuilder<NewsBloc, NewsState>(
+              child: BlocBuilder<FeaturedNewsBloc, FeaturedNewsState>(
                 builder: (context, state) {
                   return state.maybeWhen(
                     orElse: () => const SizedBox.shrink(),
                     loading: () => Center(child: CircularProgressIndicator()),
-                    success: (news, hasReachedMax, _, _) {
-                      return Column(
-                        crossAxisAlignment: .start,
-                        children: [
-                          const SectionTitle(title: 'Top News'),
-                          SizedBox(
-                            height: 200,
-                            child: CarouselView(
-                              controller: _carouselController,
-                              itemExtent: 300,
-                              children: news
-                                  .map((news) => TopNewsWidget(newsData: news))
-                                  .toList(),
-                            ),
-                          ),
-                        ],
+                    success: (news, _) {
+                      return GestureDetector(
+                        onTap: () => Navigator.pushNamed(
+                          context,
+                          DetailsPage.route,
+                          arguments: news.url,
+                        ),
+                        child: TopNewsWidget(newsData: news),
                       );
                     },
                   );
@@ -129,7 +127,7 @@ class _NewsViewState extends State<_NewsView> {
             ),
 
             // MARK: All News Section
-            SliverToBoxAdapter(child: SectionTitle(title: 'News')),
+            SliverToBoxAdapter(child: SectionTitle(title: 'Other News')),
             BlocBuilder<NewsBloc, NewsState>(
               builder: (context, state) {
                 return state.when(
