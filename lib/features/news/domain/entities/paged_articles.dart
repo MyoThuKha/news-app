@@ -1,7 +1,7 @@
 import 'package:news/features/news/domain/entities/entities.dart';
 
-class PagedArticles {
-  const PagedArticles({
+class PaginatedNewsEntity {
+  const PaginatedNewsEntity({
     required this.articles,
     required this.totalResults,
     required this.page,

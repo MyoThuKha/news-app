@@ -2,7 +2,7 @@ import 'package:news/config/database/app_database.dart';
 import 'package:news/features/news/data/datasources/local/local.dart';
 import 'package:news/features/news/data/datasources/remote/news_api_service.dart';
 import 'package:news/features/news/data/mappers/mappers.dart';
-import 'package:news/features/news/data/models/models.dart';
+import 'package:news/features/news/data/mappers/paginated_news_mapper.dart';
 import 'package:news/features/news/domain/entities/entities.dart';
 import 'package:news/features/news/domain/repositories/news_repository.dart';
 
@@ -20,9 +20,9 @@ class NewsRepositoryImpl implements NewsRepository {
   late final NewsApiService _newsApiService;
 
   @override
-  Future<PagedArticles> fetchNews(int page, {int pageSize = 20}) async {
+  Future<PaginatedNewsEntity> fetchNews(int page, {int pageSize = 20}) async {
     try {
-      final pagedArticles = await _newsApiService.fetchNews(
+      final paginatedNews = await _newsApiService.fetchNews(
         page,
         pageSize: pageSize,
       );
@@ -30,35 +30,14 @@ class NewsRepositoryImpl implements NewsRepository {
       final List<NewsTableCompanion> newsCompanions = [];
       final List<SourcesTableCompanion> sourcesCompanions = [];
 
-      for (final newsEntity in pagedArticles.articles) {
-        // Convert entity back to model for database operations
-        final newsModel = NewsModel(
-          source: newsEntity.source.id.isNotEmpty
-              ? SourceModel(
-                  id: newsEntity.source.id,
-                  name: newsEntity.source.name,
-                )
-              : null,
-          author: newsEntity.author.isNotEmpty ? newsEntity.author : null,
-          title: newsEntity.title.isNotEmpty ? newsEntity.title : null,
-          description: newsEntity.description.isNotEmpty
-              ? newsEntity.description
-              : null,
-          url: newsEntity.url.isNotEmpty ? newsEntity.url : null,
-          urlToImage: newsEntity.urlToImage.isNotEmpty
-              ? newsEntity.urlToImage
-              : null,
-          publishedAt: newsEntity.publishedAt?.toIso8601String(),
-          content: newsEntity.content.isNotEmpty ? newsEntity.content : null,
-        );
+      for (final news in paginatedNews.articles) {
+        String? sourceId = news.source?.id;
 
-        String? sourceId = newsModel.source?.id;
-
-        if (newsModel.source != null) {
-          final sourceCompanion = newsModel.source!.toTableCompanion();
+        if (news.source != null) {
+          final sourceCompanion = news.source!.toTableCompanion();
           sourcesCompanions.add(sourceCompanion);
         }
-        final newsCompanion = newsModel.toTableCompanion(sourceId);
+        final newsCompanion = news.toTableCompanion(sourceId);
         newsCompanions.add(newsCompanion);
       }
 
@@ -70,7 +49,7 @@ class NewsRepositoryImpl implements NewsRepository {
         await _newsTable.insertBulkNews(newsCompanions);
       }
 
-      return pagedArticles;
+      return paginatedNews.toEntity(page, pageSize);
     } catch (_) {
       rethrow;
     }
