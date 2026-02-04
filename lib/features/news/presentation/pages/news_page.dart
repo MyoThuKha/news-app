@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news/core/ui/extensions/context_extensions.dart';
 import 'package:news/features/news/presentation/bloc/news_bloc.dart';
+import 'package:news/features/news/presentation/pages/details_page.dart';
 import 'package:news/features/news/presentation/widgets/widgets.dart';
 import 'package:news/injection/injection_container.dart';
 
@@ -137,11 +138,11 @@ class _NewsViewState extends State<_NewsView> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  // Navigator.pushNamed(
-                                  //   context,
-                                  //   DetailsPage.route,
-                                  //   arguments: news[index].url,
-                                  // );
+                                  Navigator.pushNamed(
+                                    context,
+                                    DetailsPage.route,
+                                    arguments: news[index].url,
+                                  );
                                 },
                                 child: NewsTile(newsData: news[index]),
                               ),
