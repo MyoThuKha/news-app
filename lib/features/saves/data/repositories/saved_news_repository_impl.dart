@@ -1,6 +1,6 @@
 import 'package:news/features/news/domain/entities/entities.dart';
 import 'package:news/features/saves/data/datasources/datasources.dart';
-import 'package:news/features/saves/data/datasources/mapper/saved_news_with_source_mapper.dart';
+import 'package:news/features/saves/data/mappers/saved_news_with_source_mapper.dart';
 import 'package:news/features/saves/data/mappers/saved_table_mapper.dart';
 import 'package:news/features/saves/domain/entities/entities.dart';
 import 'package:news/features/saves/domain/repositories/saved_news_repository.dart';

@@ -17,8 +17,10 @@ class ThemeRepositoryImpl implements ThemeRepository {
   String _toString(AppThemeMode m) => m.name;
 
   @override
-  Future<AppThemeMode> getThemeMode() async => _fromString(await local.getThemeMode());
+  Future<AppThemeMode> getThemeMode() async =>
+      _fromString(await local.getThemeMode());
 
   @override
-  Future<void> saveThemeMode(AppThemeMode mode) async => local.saveThemeMode(_toString(mode));
+  Future<void> saveThemeMode(AppThemeMode mode) async =>
+      local.saveThemeMode(_toString(mode));
 }

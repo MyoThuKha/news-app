@@ -6,7 +6,7 @@ import 'package:news/features/news/data/repositories/news_repository_impl.dart';
 import 'package:news/features/news/domain/repositories/news_repository.dart';
 import 'package:news/features/news/domain/usecases/usecases.dart';
 import 'package:news/features/news/presentation/bloc/featured_news/featured_news_bloc.dart';
-import 'package:news/features/news/presentation/bloc/news_bloc.dart';
+import 'package:news/features/news/presentation/bloc/news/news_bloc.dart';
 import 'package:news/features/news/presentation/bloc/news_details/news_details_bloc.dart';
 
 final sl = GetIt.instance;

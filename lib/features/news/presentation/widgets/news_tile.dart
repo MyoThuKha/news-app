@@ -20,7 +20,6 @@ class NewsTile extends StatelessWidget {
       child: Row(
         spacing: 15,
         children: [
-
           // MARK: Leading image
           Hero(
             tag: newsData.urlToImage,
