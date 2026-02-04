@@ -1,6 +1,7 @@
+import 'package:news/features/news/domain/entities/entities.dart';
 import 'package:news/features/saves/data/datasources/datasources.dart';
-import 'package:news/features/saves/data/datasources/mapper/saved_news_entity_mapper.dart';
 import 'package:news/features/saves/data/datasources/mapper/saved_news_with_source_mapper.dart';
+import 'package:news/features/saves/data/mappers/saved_table_mapper.dart';
 import 'package:news/features/saves/domain/entities/entities.dart';
 import 'package:news/features/saves/domain/repositories/saved_news_repository.dart';
 
@@ -9,13 +10,13 @@ class SavedNewsRepositoryImpl implements SavedNewsRepository {
   late final SavesDao _savesDao;
 
   @override
-  Future<void> saveNews(SavedNewsEntity data) async {
-    await _savesDao.saveNews(data.toCompanion(data.news.url));
+  Future<void> saveNews(NewsEntity news) async {
+    await _savesDao.saveNews(news.toCompanion(news.url));
   }
 
   @override
-  Future<void> deleteNews(SavedNewsEntity data) async {
-    await _savesDao.deleteNews(data.toCompanion(data.news.url));
+  Future<void> deleteNews(NewsEntity news) async {
+    await _savesDao.deleteNews(news.toCompanion(news.url));
   }
 
   @override

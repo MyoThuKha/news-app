@@ -959,9 +959,9 @@ class $SavesTableTable extends SavesTable
   late final GeneratedColumn<String> newsId = GeneratedColumn<String>(
     'news_id',
     aliasedName,
-    true,
+    false,
     type: DriftSqlType.string,
-    requiredDuringInsert: false,
+    requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'REFERENCES news_table (url)',
     ),
@@ -997,6 +997,8 @@ class $SavesTableTable extends SavesTable
         _newsIdMeta,
         newsId.isAcceptableOrUnknown(data['news_id']!, _newsIdMeta),
       );
+    } else if (isInserting) {
+      context.missing(_newsIdMeta);
     }
     if (data.containsKey('saved_at')) {
       context.handle(
@@ -1008,7 +1010,7 @@ class $SavesTableTable extends SavesTable
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {newsId};
   @override
   SavesTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -1016,7 +1018,7 @@ class $SavesTableTable extends SavesTable
       newsId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}news_id'],
-      ),
+      )!,
       savedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}saved_at'],
@@ -1031,26 +1033,19 @@ class $SavesTableTable extends SavesTable
 }
 
 class SavesTableData extends DataClass implements Insertable<SavesTableData> {
-  final String? newsId;
+  final String newsId;
   final DateTime savedAt;
-  const SavesTableData({this.newsId, required this.savedAt});
+  const SavesTableData({required this.newsId, required this.savedAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (!nullToAbsent || newsId != null) {
-      map['news_id'] = Variable<String>(newsId);
-    }
+    map['news_id'] = Variable<String>(newsId);
     map['saved_at'] = Variable<DateTime>(savedAt);
     return map;
   }
 
   SavesTableCompanion toCompanion(bool nullToAbsent) {
-    return SavesTableCompanion(
-      newsId: newsId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(newsId),
-      savedAt: Value(savedAt),
-    );
+    return SavesTableCompanion(newsId: Value(newsId), savedAt: Value(savedAt));
   }
 
   factory SavesTableData.fromJson(
@@ -1059,7 +1054,7 @@ class SavesTableData extends DataClass implements Insertable<SavesTableData> {
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return SavesTableData(
-      newsId: serializer.fromJson<String?>(json['newsId']),
+      newsId: serializer.fromJson<String>(json['newsId']),
       savedAt: serializer.fromJson<DateTime>(json['savedAt']),
     );
   }
@@ -1067,18 +1062,16 @@ class SavesTableData extends DataClass implements Insertable<SavesTableData> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'newsId': serializer.toJson<String?>(newsId),
+      'newsId': serializer.toJson<String>(newsId),
       'savedAt': serializer.toJson<DateTime>(savedAt),
     };
   }
 
-  SavesTableData copyWith({
-    Value<String?> newsId = const Value.absent(),
-    DateTime? savedAt,
-  }) => SavesTableData(
-    newsId: newsId.present ? newsId.value : this.newsId,
-    savedAt: savedAt ?? this.savedAt,
-  );
+  SavesTableData copyWith({String? newsId, DateTime? savedAt}) =>
+      SavesTableData(
+        newsId: newsId ?? this.newsId,
+        savedAt: savedAt ?? this.savedAt,
+      );
   SavesTableData copyWithCompanion(SavesTableCompanion data) {
     return SavesTableData(
       newsId: data.newsId.present ? data.newsId.value : this.newsId,
@@ -1106,7 +1099,7 @@ class SavesTableData extends DataClass implements Insertable<SavesTableData> {
 }
 
 class SavesTableCompanion extends UpdateCompanion<SavesTableData> {
-  final Value<String?> newsId;
+  final Value<String> newsId;
   final Value<DateTime> savedAt;
   final Value<int> rowid;
   const SavesTableCompanion({
@@ -1115,10 +1108,10 @@ class SavesTableCompanion extends UpdateCompanion<SavesTableData> {
     this.rowid = const Value.absent(),
   });
   SavesTableCompanion.insert({
-    this.newsId = const Value.absent(),
+    required String newsId,
     this.savedAt = const Value.absent(),
     this.rowid = const Value.absent(),
-  });
+  }) : newsId = Value(newsId);
   static Insertable<SavesTableData> custom({
     Expression<String>? newsId,
     Expression<DateTime>? savedAt,
@@ -1132,7 +1125,7 @@ class SavesTableCompanion extends UpdateCompanion<SavesTableData> {
   }
 
   SavesTableCompanion copyWith({
-    Value<String?>? newsId,
+    Value<String>? newsId,
     Value<DateTime>? savedAt,
     Value<int>? rowid,
   }) {
@@ -1983,13 +1976,13 @@ typedef $$NewsTableTableProcessedTableManager =
     >;
 typedef $$SavesTableTableCreateCompanionBuilder =
     SavesTableCompanion Function({
-      Value<String?> newsId,
+      required String newsId,
       Value<DateTime> savedAt,
       Value<int> rowid,
     });
 typedef $$SavesTableTableUpdateCompanionBuilder =
     SavesTableCompanion Function({
-      Value<String?> newsId,
+      Value<String> newsId,
       Value<DateTime> savedAt,
       Value<int> rowid,
     });
@@ -2003,9 +1996,9 @@ final class $$SavesTableTableReferences
         $_aliasNameGenerator(db.savesTable.newsId, db.newsTable.url),
       );
 
-  $$NewsTableTableProcessedTableManager? get newsId {
-    final $_column = $_itemColumn<String>('news_id');
-    if ($_column == null) return null;
+  $$NewsTableTableProcessedTableManager get newsId {
+    final $_column = $_itemColumn<String>('news_id')!;
+
     final manager = $$NewsTableTableTableManager(
       $_db,
       $_db.newsTable,
@@ -2158,7 +2151,7 @@ class $$SavesTableTableTableManager
               $$SavesTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
-                Value<String?> newsId = const Value.absent(),
+                Value<String> newsId = const Value.absent(),
                 Value<DateTime> savedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => SavesTableCompanion(
@@ -2168,7 +2161,7 @@ class $$SavesTableTableTableManager
               ),
           createCompanionCallback:
               ({
-                Value<String?> newsId = const Value.absent(),
+                required String newsId,
                 Value<DateTime> savedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => SavesTableCompanion.insert(

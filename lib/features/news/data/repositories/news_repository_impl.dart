@@ -1,6 +1,5 @@
 import 'package:news/config/database/app_database.dart';
-import 'package:news/features/news/data/datasources/local/local.dart';
-import 'package:news/features/news/data/datasources/remote/news_api_service.dart';
+import 'package:news/features/news/data/datasources/datasources.dart';
 import 'package:news/features/news/data/mappers/mappers.dart';
 import 'package:news/features/news/data/mappers/paginated_news_mapper.dart';
 import 'package:news/features/news/domain/entities/entities.dart';
