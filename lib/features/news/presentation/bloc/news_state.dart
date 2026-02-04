@@ -8,6 +8,7 @@ class NewsState with _$NewsState {
     required List<NewsEntity> news,
     @Default(false) bool hasReachedMax,
     @Default(false) bool isMoreLoading,
+    @Default(false) bool isCached
   }) = _Success;
   const factory NewsState.error({required String message}) = _Error;
 }

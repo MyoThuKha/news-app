@@ -74,14 +74,38 @@ class _NewsViewState extends State<_NewsView> {
               ),
             ),
 
+            PinnedHeaderSliver(
+              child: BlocBuilder<NewsBloc, NewsState>(
+                builder: (context, state) {
+                  return state.maybeWhen(
+                    orElse: () => const SizedBox.shrink(),
+                    success: (_, _, _, isCached) {
+                      if (!isCached) return const SizedBox.shrink();
+
+                      return Container(
+                        padding: .all(15),
+                        color: context.colorScheme.primaryContainer,
+                        alignment: .center,
+                        child: Text(
+                          'Using Cached Data',
+                          style: context.textTheme.labelLarge?.copyWith(
+                            color: context.colorScheme.onPrimaryContainer,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+
             SliverToBoxAdapter(
               child: BlocBuilder<NewsBloc, NewsState>(
                 builder: (context, state) {
-                  return state.when(
-                    initial: () => Center(child: Text('Pull to refresh')),
+                  return state.maybeWhen(
+                    orElse: () => const SizedBox.shrink(),
                     loading: () => Center(child: CircularProgressIndicator()),
-                    error: (message) => const SizedBox.shrink(),
-                    success: (news, hasReachedMax, _) {
+                    success: (news, hasReachedMax, _, _) {
                       return Column(
                         crossAxisAlignment: .start,
                         children: [
@@ -154,6 +178,7 @@ class _NewsViewState extends State<_NewsView> {
     List<NewsEntity> news,
     bool hasReachedMax,
     bool isMoreLoading,
+    bool isCached,
   ) {
     if (news.isEmpty) {
       return const SliverFillRemaining(

@@ -434,12 +434,12 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<NewsEntity> news,  bool hasReachedMax,  bool isMoreLoading)?  success,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<NewsEntity> news,  bool hasReachedMax,  bool isMoreLoading,  bool isCached)?  success,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Success() when success != null:
-return success(_that.news,_that.hasReachedMax,_that.isMoreLoading);case _Error() when error != null:
+return success(_that.news,_that.hasReachedMax,_that.isMoreLoading,_that.isCached);case _Error() when error != null:
 return error(_that.message);case _:
   return orElse();
 
@@ -458,12 +458,12 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<NewsEntity> news,  bool hasReachedMax,  bool isMoreLoading)  success,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<NewsEntity> news,  bool hasReachedMax,  bool isMoreLoading,  bool isCached)  success,required TResult Function( String message)  error,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
 return loading();case _Success():
-return success(_that.news,_that.hasReachedMax,_that.isMoreLoading);case _Error():
+return success(_that.news,_that.hasReachedMax,_that.isMoreLoading,_that.isCached);case _Error():
 return error(_that.message);case _:
   throw StateError('Unexpected subclass');
 
@@ -481,12 +481,12 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<NewsEntity> news,  bool hasReachedMax,  bool isMoreLoading)?  success,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<NewsEntity> news,  bool hasReachedMax,  bool isMoreLoading,  bool isCached)?  success,TResult? Function( String message)?  error,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Success() when success != null:
-return success(_that.news,_that.hasReachedMax,_that.isMoreLoading);case _Error() when error != null:
+return success(_that.news,_that.hasReachedMax,_that.isMoreLoading,_that.isCached);case _Error() when error != null:
 return error(_that.message);case _:
   return null;
 
@@ -563,7 +563,7 @@ String toString() {
 
 
 class _Success implements NewsState {
-  const _Success({required final  List<NewsEntity> news, this.hasReachedMax = false, this.isMoreLoading = false}): _news = news;
+  const _Success({required final  List<NewsEntity> news, this.hasReachedMax = false, this.isMoreLoading = false, this.isCached = false}): _news = news;
   
 
  final  List<NewsEntity> _news;
@@ -575,6 +575,7 @@ class _Success implements NewsState {
 
 @JsonKey() final  bool hasReachedMax;
 @JsonKey() final  bool isMoreLoading;
+@JsonKey() final  bool isCached;
 
 /// Create a copy of NewsState
 /// with the given fields replaced by the non-null parameter values.
@@ -586,16 +587,16 @@ _$SuccessCopyWith<_Success> get copyWith => __$SuccessCopyWithImpl<_Success>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Success&&const DeepCollectionEquality().equals(other._news, _news)&&(identical(other.hasReachedMax, hasReachedMax) || other.hasReachedMax == hasReachedMax)&&(identical(other.isMoreLoading, isMoreLoading) || other.isMoreLoading == isMoreLoading));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Success&&const DeepCollectionEquality().equals(other._news, _news)&&(identical(other.hasReachedMax, hasReachedMax) || other.hasReachedMax == hasReachedMax)&&(identical(other.isMoreLoading, isMoreLoading) || other.isMoreLoading == isMoreLoading)&&(identical(other.isCached, isCached) || other.isCached == isCached));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_news),hasReachedMax,isMoreLoading);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_news),hasReachedMax,isMoreLoading,isCached);
 
 @override
 String toString() {
-  return 'NewsState.success(news: $news, hasReachedMax: $hasReachedMax, isMoreLoading: $isMoreLoading)';
+  return 'NewsState.success(news: $news, hasReachedMax: $hasReachedMax, isMoreLoading: $isMoreLoading, isCached: $isCached)';
 }
 
 
@@ -606,7 +607,7 @@ abstract mixin class _$SuccessCopyWith<$Res> implements $NewsStateCopyWith<$Res>
   factory _$SuccessCopyWith(_Success value, $Res Function(_Success) _then) = __$SuccessCopyWithImpl;
 @useResult
 $Res call({
- List<NewsEntity> news, bool hasReachedMax, bool isMoreLoading
+ List<NewsEntity> news, bool hasReachedMax, bool isMoreLoading, bool isCached
 });
 
 
@@ -623,11 +624,12 @@ class __$SuccessCopyWithImpl<$Res>
 
 /// Create a copy of NewsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? news = null,Object? hasReachedMax = null,Object? isMoreLoading = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? news = null,Object? hasReachedMax = null,Object? isMoreLoading = null,Object? isCached = null,}) {
   return _then(_Success(
 news: null == news ? _self._news : news // ignore: cast_nullable_to_non_nullable
 as List<NewsEntity>,hasReachedMax: null == hasReachedMax ? _self.hasReachedMax : hasReachedMax // ignore: cast_nullable_to_non_nullable
 as bool,isMoreLoading: null == isMoreLoading ? _self.isMoreLoading : isMoreLoading // ignore: cast_nullable_to_non_nullable
+as bool,isCached: null == isCached ? _self.isCached : isCached // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
