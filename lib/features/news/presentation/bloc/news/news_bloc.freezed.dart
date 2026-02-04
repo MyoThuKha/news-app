@@ -128,12 +128,12 @@ return loadMore(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function()?  newsLoaded,TResult Function()?  newsRefreshed,TResult Function()?  loadMore,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function()?  newsLoaded,TResult Function( Completer<void>? refreshCompleter)?  newsRefreshed,TResult Function()?  loadMore,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _NewsLoaded() when newsLoaded != null:
 return newsLoaded();case _NewsRefreshed() when newsRefreshed != null:
-return newsRefreshed();case _NewsLoadMore() when loadMore != null:
+return newsRefreshed(_that.refreshCompleter);case _NewsLoadMore() when loadMore != null:
 return loadMore();case _:
   return orElse();
 
@@ -152,12 +152,12 @@ return loadMore();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function()  newsLoaded,required TResult Function()  newsRefreshed,required TResult Function()  loadMore,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function()  newsLoaded,required TResult Function( Completer<void>? refreshCompleter)  newsRefreshed,required TResult Function()  loadMore,}) {final _that = this;
 switch (_that) {
 case _Started():
 return started();case _NewsLoaded():
 return newsLoaded();case _NewsRefreshed():
-return newsRefreshed();case _NewsLoadMore():
+return newsRefreshed(_that.refreshCompleter);case _NewsLoadMore():
 return loadMore();case _:
   throw StateError('Unexpected subclass');
 
@@ -175,12 +175,12 @@ return loadMore();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function()?  newsLoaded,TResult? Function()?  newsRefreshed,TResult? Function()?  loadMore,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function()?  newsLoaded,TResult? Function( Completer<void>? refreshCompleter)?  newsRefreshed,TResult? Function()?  loadMore,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _NewsLoaded() when newsLoaded != null:
 return newsLoaded();case _NewsRefreshed() when newsRefreshed != null:
-return newsRefreshed();case _NewsLoadMore() when loadMore != null:
+return newsRefreshed(_that.refreshCompleter);case _NewsLoadMore() when loadMore != null:
 return loadMore();case _:
   return null;
 
@@ -257,33 +257,67 @@ String toString() {
 
 
 class _NewsRefreshed implements NewsEvent {
-  const _NewsRefreshed();
+  const _NewsRefreshed({this.refreshCompleter});
   
 
+ final  Completer<void>? refreshCompleter;
 
-
+/// Create a copy of NewsEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$NewsRefreshedCopyWith<_NewsRefreshed> get copyWith => __$NewsRefreshedCopyWithImpl<_NewsRefreshed>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NewsRefreshed);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NewsRefreshed&&const DeepCollectionEquality().equals(other.refreshCompleter, refreshCompleter));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(refreshCompleter));
 
 @override
 String toString() {
-  return 'NewsEvent.newsRefreshed()';
+  return 'NewsEvent.newsRefreshed(refreshCompleter: $refreshCompleter)';
 }
 
 
 }
 
+/// @nodoc
+abstract mixin class _$NewsRefreshedCopyWith<$Res> implements $NewsEventCopyWith<$Res> {
+  factory _$NewsRefreshedCopyWith(_NewsRefreshed value, $Res Function(_NewsRefreshed) _then) = __$NewsRefreshedCopyWithImpl;
+@useResult
+$Res call({
+ Completer<void>? refreshCompleter
+});
 
 
+
+
+}
+/// @nodoc
+class __$NewsRefreshedCopyWithImpl<$Res>
+    implements _$NewsRefreshedCopyWith<$Res> {
+  __$NewsRefreshedCopyWithImpl(this._self, this._then);
+
+  final _NewsRefreshed _self;
+  final $Res Function(_NewsRefreshed) _then;
+
+/// Create a copy of NewsEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? refreshCompleter = freezed,}) {
+  return _then(_NewsRefreshed(
+refreshCompleter: freezed == refreshCompleter ? _self.refreshCompleter : refreshCompleter // ignore: cast_nullable_to_non_nullable
+as Completer<void>?,
+  ));
+}
+
+
+}
 
 /// @nodoc
 

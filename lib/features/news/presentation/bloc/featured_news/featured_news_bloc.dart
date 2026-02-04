@@ -25,8 +25,19 @@ class FeaturedNewsBloc extends Bloc<FeaturedNewsEvent, FeaturedNewsState> {
     _FeaturedNewsRefreshed event,
     Emitter<FeaturedNewsState> emit,
   ) async {
-    emit(const .loading());
-    await _fetchFeaturedNewsUseCase.call(FetchNewsParams(page: 1));
+    bool isCached = false;
+    try {
+      await _fetchFeaturedNewsUseCase.call(FetchNewsParams(page: 1));
+    } catch (e) {
+      isCached = true;
+    }
+
+    state.maybeWhen(
+      orElse: () {},
+      success: (news, _) {
+        emit(.success(news: news, isCached: isCached));
+      },
+    );
   }
 
   void _onNewsLoaded(
