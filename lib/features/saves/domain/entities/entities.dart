@@ -1,0 +1,1 @@
+export 'saved_news_entity.dart';
