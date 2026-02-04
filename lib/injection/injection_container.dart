@@ -14,6 +14,7 @@ import 'package:news/features/news/domain/usecases/usecases.dart';
 import 'package:news/features/news/presentation/bloc/news_bloc.dart';
 import 'package:news/injection/details_injection.dart';
 import 'package:news/injection/saves_injection.dart';
+import 'package:news/injection/theme_injection.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
@@ -78,6 +79,7 @@ Future<void> initDependencies() async {
     ),
   );
 
+  await initThemeDeps();
   await initDetailDeps();
   await initSavedNewsDeps();
 }
