@@ -6,5 +6,5 @@ abstract class NewsRepository {
   Future<PaginatedNewsEntity> fetchFeaturedNews(int page, {int pageSize});
 
   Stream<NewsEntity> getNewsDetail(String url);
-  Stream<NewsEntity> getFeaturedNews();
+  Stream<NewsEntity?> getFeaturedNews();
 }

@@ -15,5 +15,6 @@ abstract class NewsEntity with _$NewsEntity {
     required DateTime? publishedAt,
     required String content,
     required DateTime? cachedAt,
+    required bool isFeatured,
   }) = _NewsEntity;
 }

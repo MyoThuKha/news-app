@@ -15,10 +15,19 @@ class FeaturedNewsBloc extends Bloc<FeaturedNewsEvent, FeaturedNewsState> {
        _fetchFeaturedNewsUseCase = fetchFeaturedNewsUseCase,
        super(_Initial()) {
     on<_FeaturedNewsLoaded>(_onNewsLoaded);
+    on<_FeaturedNewsRefreshed>(_onRefreshed);
   }
 
   late final GetFeaturedNewsUseCase _getFeaturedNewsUseCase;
   late final FetchFeaturedNewsUseCase _fetchFeaturedNewsUseCase;
+
+  void _onRefreshed(
+    _FeaturedNewsRefreshed event,
+    Emitter<FeaturedNewsState> emit,
+  ) async {
+    emit(const .loading());
+    await _fetchFeaturedNewsUseCase.call(FetchNewsParams(page: 1));
+  }
 
   void _onNewsLoaded(
     _FeaturedNewsLoaded event,
@@ -37,7 +46,16 @@ class FeaturedNewsBloc extends Bloc<FeaturedNewsEvent, FeaturedNewsState> {
     final stream = _getFeaturedNewsUseCase.call(NoParams());
     await emit.forEach(
       stream,
-      onData: (news) => .success(news: news, isCached: isCached),
+      onData: (news) {
+        if (news == null) return const .empty();
+        return .success(news: news, isCached: isCached);
+      },
     );
+  }
+
+  @override
+  void onChange(Change<FeaturedNewsState> change) {
+    print(change.nextState);
+    super.onChange(change);
   }
 }

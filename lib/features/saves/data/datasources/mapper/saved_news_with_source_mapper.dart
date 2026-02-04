@@ -15,6 +15,7 @@ extension SavedNewsWithSourceMapper on SavedNewsWithSource {
       publishedAt: news.publishedAt,
       content: news.content ?? '',
       cachedAt: news.createdAt,
+      isFeatured: news.isFeatured,
     );
   }
 

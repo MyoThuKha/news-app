@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$NewsEntity {
 
- SourceEntity get source; String get author; String get title; String get description; String get url; String get urlToImage; DateTime? get publishedAt; String get content; DateTime? get cachedAt;
+ SourceEntity get source; String get author; String get title; String get description; String get url; String get urlToImage; DateTime? get publishedAt; String get content; DateTime? get cachedAt; bool get isFeatured;
 /// Create a copy of NewsEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $NewsEntityCopyWith<NewsEntity> get copyWith => _$NewsEntityCopyWithImpl<NewsEnt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NewsEntity&&(identical(other.source, source) || other.source == source)&&(identical(other.author, author) || other.author == author)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.url, url) || other.url == url)&&(identical(other.urlToImage, urlToImage) || other.urlToImage == urlToImage)&&(identical(other.publishedAt, publishedAt) || other.publishedAt == publishedAt)&&(identical(other.content, content) || other.content == content)&&(identical(other.cachedAt, cachedAt) || other.cachedAt == cachedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is NewsEntity&&(identical(other.source, source) || other.source == source)&&(identical(other.author, author) || other.author == author)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.url, url) || other.url == url)&&(identical(other.urlToImage, urlToImage) || other.urlToImage == urlToImage)&&(identical(other.publishedAt, publishedAt) || other.publishedAt == publishedAt)&&(identical(other.content, content) || other.content == content)&&(identical(other.cachedAt, cachedAt) || other.cachedAt == cachedAt)&&(identical(other.isFeatured, isFeatured) || other.isFeatured == isFeatured));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,source,author,title,description,url,urlToImage,publishedAt,content,cachedAt);
+int get hashCode => Object.hash(runtimeType,source,author,title,description,url,urlToImage,publishedAt,content,cachedAt,isFeatured);
 
 @override
 String toString() {
-  return 'NewsEntity(source: $source, author: $author, title: $title, description: $description, url: $url, urlToImage: $urlToImage, publishedAt: $publishedAt, content: $content, cachedAt: $cachedAt)';
+  return 'NewsEntity(source: $source, author: $author, title: $title, description: $description, url: $url, urlToImage: $urlToImage, publishedAt: $publishedAt, content: $content, cachedAt: $cachedAt, isFeatured: $isFeatured)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $NewsEntityCopyWith<$Res>  {
   factory $NewsEntityCopyWith(NewsEntity value, $Res Function(NewsEntity) _then) = _$NewsEntityCopyWithImpl;
 @useResult
 $Res call({
- SourceEntity source, String author, String title, String description, String url, String urlToImage, DateTime? publishedAt, String content, DateTime? cachedAt
+ SourceEntity source, String author, String title, String description, String url, String urlToImage, DateTime? publishedAt, String content, DateTime? cachedAt, bool isFeatured
 });
 
 
@@ -62,7 +62,7 @@ class _$NewsEntityCopyWithImpl<$Res>
 
 /// Create a copy of NewsEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? source = null,Object? author = null,Object? title = null,Object? description = null,Object? url = null,Object? urlToImage = null,Object? publishedAt = freezed,Object? content = null,Object? cachedAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? source = null,Object? author = null,Object? title = null,Object? description = null,Object? url = null,Object? urlToImage = null,Object? publishedAt = freezed,Object? content = null,Object? cachedAt = freezed,Object? isFeatured = null,}) {
   return _then(_self.copyWith(
 source: null == source ? _self.source : source // ignore: cast_nullable_to_non_nullable
 as SourceEntity,author: null == author ? _self.author : author // ignore: cast_nullable_to_non_nullable
@@ -73,7 +73,8 @@ as String,urlToImage: null == urlToImage ? _self.urlToImage : urlToImage // igno
 as String,publishedAt: freezed == publishedAt ? _self.publishedAt : publishedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
 as String,cachedAt: freezed == cachedAt ? _self.cachedAt : cachedAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as DateTime?,isFeatured: null == isFeatured ? _self.isFeatured : isFeatured // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 /// Create a copy of NewsEntity
@@ -167,10 +168,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( SourceEntity source,  String author,  String title,  String description,  String url,  String urlToImage,  DateTime? publishedAt,  String content,  DateTime? cachedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( SourceEntity source,  String author,  String title,  String description,  String url,  String urlToImage,  DateTime? publishedAt,  String content,  DateTime? cachedAt,  bool isFeatured)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _NewsEntity() when $default != null:
-return $default(_that.source,_that.author,_that.title,_that.description,_that.url,_that.urlToImage,_that.publishedAt,_that.content,_that.cachedAt);case _:
+return $default(_that.source,_that.author,_that.title,_that.description,_that.url,_that.urlToImage,_that.publishedAt,_that.content,_that.cachedAt,_that.isFeatured);case _:
   return orElse();
 
 }
@@ -188,10 +189,10 @@ return $default(_that.source,_that.author,_that.title,_that.description,_that.ur
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( SourceEntity source,  String author,  String title,  String description,  String url,  String urlToImage,  DateTime? publishedAt,  String content,  DateTime? cachedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( SourceEntity source,  String author,  String title,  String description,  String url,  String urlToImage,  DateTime? publishedAt,  String content,  DateTime? cachedAt,  bool isFeatured)  $default,) {final _that = this;
 switch (_that) {
 case _NewsEntity():
-return $default(_that.source,_that.author,_that.title,_that.description,_that.url,_that.urlToImage,_that.publishedAt,_that.content,_that.cachedAt);case _:
+return $default(_that.source,_that.author,_that.title,_that.description,_that.url,_that.urlToImage,_that.publishedAt,_that.content,_that.cachedAt,_that.isFeatured);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -208,10 +209,10 @@ return $default(_that.source,_that.author,_that.title,_that.description,_that.ur
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( SourceEntity source,  String author,  String title,  String description,  String url,  String urlToImage,  DateTime? publishedAt,  String content,  DateTime? cachedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( SourceEntity source,  String author,  String title,  String description,  String url,  String urlToImage,  DateTime? publishedAt,  String content,  DateTime? cachedAt,  bool isFeatured)?  $default,) {final _that = this;
 switch (_that) {
 case _NewsEntity() when $default != null:
-return $default(_that.source,_that.author,_that.title,_that.description,_that.url,_that.urlToImage,_that.publishedAt,_that.content,_that.cachedAt);case _:
+return $default(_that.source,_that.author,_that.title,_that.description,_that.url,_that.urlToImage,_that.publishedAt,_that.content,_that.cachedAt,_that.isFeatured);case _:
   return null;
 
 }
@@ -223,7 +224,7 @@ return $default(_that.source,_that.author,_that.title,_that.description,_that.ur
 
 
 class _NewsEntity implements NewsEntity {
-  const _NewsEntity({required this.source, required this.author, required this.title, required this.description, required this.url, required this.urlToImage, required this.publishedAt, required this.content, required this.cachedAt});
+  const _NewsEntity({required this.source, required this.author, required this.title, required this.description, required this.url, required this.urlToImage, required this.publishedAt, required this.content, required this.cachedAt, required this.isFeatured});
   
 
 @override final  SourceEntity source;
@@ -235,6 +236,7 @@ class _NewsEntity implements NewsEntity {
 @override final  DateTime? publishedAt;
 @override final  String content;
 @override final  DateTime? cachedAt;
+@override final  bool isFeatured;
 
 /// Create a copy of NewsEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -246,16 +248,16 @@ _$NewsEntityCopyWith<_NewsEntity> get copyWith => __$NewsEntityCopyWithImpl<_New
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NewsEntity&&(identical(other.source, source) || other.source == source)&&(identical(other.author, author) || other.author == author)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.url, url) || other.url == url)&&(identical(other.urlToImage, urlToImage) || other.urlToImage == urlToImage)&&(identical(other.publishedAt, publishedAt) || other.publishedAt == publishedAt)&&(identical(other.content, content) || other.content == content)&&(identical(other.cachedAt, cachedAt) || other.cachedAt == cachedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NewsEntity&&(identical(other.source, source) || other.source == source)&&(identical(other.author, author) || other.author == author)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.url, url) || other.url == url)&&(identical(other.urlToImage, urlToImage) || other.urlToImage == urlToImage)&&(identical(other.publishedAt, publishedAt) || other.publishedAt == publishedAt)&&(identical(other.content, content) || other.content == content)&&(identical(other.cachedAt, cachedAt) || other.cachedAt == cachedAt)&&(identical(other.isFeatured, isFeatured) || other.isFeatured == isFeatured));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,source,author,title,description,url,urlToImage,publishedAt,content,cachedAt);
+int get hashCode => Object.hash(runtimeType,source,author,title,description,url,urlToImage,publishedAt,content,cachedAt,isFeatured);
 
 @override
 String toString() {
-  return 'NewsEntity(source: $source, author: $author, title: $title, description: $description, url: $url, urlToImage: $urlToImage, publishedAt: $publishedAt, content: $content, cachedAt: $cachedAt)';
+  return 'NewsEntity(source: $source, author: $author, title: $title, description: $description, url: $url, urlToImage: $urlToImage, publishedAt: $publishedAt, content: $content, cachedAt: $cachedAt, isFeatured: $isFeatured)';
 }
 
 
@@ -266,7 +268,7 @@ abstract mixin class _$NewsEntityCopyWith<$Res> implements $NewsEntityCopyWith<$
   factory _$NewsEntityCopyWith(_NewsEntity value, $Res Function(_NewsEntity) _then) = __$NewsEntityCopyWithImpl;
 @override @useResult
 $Res call({
- SourceEntity source, String author, String title, String description, String url, String urlToImage, DateTime? publishedAt, String content, DateTime? cachedAt
+ SourceEntity source, String author, String title, String description, String url, String urlToImage, DateTime? publishedAt, String content, DateTime? cachedAt, bool isFeatured
 });
 
 
@@ -283,7 +285,7 @@ class __$NewsEntityCopyWithImpl<$Res>
 
 /// Create a copy of NewsEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? source = null,Object? author = null,Object? title = null,Object? description = null,Object? url = null,Object? urlToImage = null,Object? publishedAt = freezed,Object? content = null,Object? cachedAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? source = null,Object? author = null,Object? title = null,Object? description = null,Object? url = null,Object? urlToImage = null,Object? publishedAt = freezed,Object? content = null,Object? cachedAt = freezed,Object? isFeatured = null,}) {
   return _then(_NewsEntity(
 source: null == source ? _self.source : source // ignore: cast_nullable_to_non_nullable
 as SourceEntity,author: null == author ? _self.author : author // ignore: cast_nullable_to_non_nullable
@@ -294,7 +296,8 @@ as String,urlToImage: null == urlToImage ? _self.urlToImage : urlToImage // igno
 as String,publishedAt: freezed == publishedAt ? _self.publishedAt : publishedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
 as String,cachedAt: freezed == cachedAt ? _self.cachedAt : cachedAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as DateTime?,isFeatured: null == isFeatured ? _self.isFeatured : isFeatured // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
