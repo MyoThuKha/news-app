@@ -8,4 +8,6 @@ class SavedStatusEvent with _$SavedStatusEvent {
       _SaveStatusLoaded;
   const factory SavedStatusEvent.saveRemoved(NewsEntity news) = _SaveRemoved;
   const factory SavedStatusEvent.saveAdded(NewsEntity news) = _SaveAdded;
+
+  const factory SavedStatusEvent.saveToggled(NewsEntity news) = _SaveToggled;
 }

@@ -108,7 +108,7 @@ class _DetailViewState extends State<_DetailView> {
           actions: [
             FilledButton(
               onPressed: () {
-                context.read<SaveStatusBloc>().add(.saveAdded(newsData));
+                context.read<SaveStatusBloc>().add(.saveToggled(newsData));
               },
               child: BlocBuilder<SaveStatusBloc, SavedStatusState>(
                 builder: (context, state) {

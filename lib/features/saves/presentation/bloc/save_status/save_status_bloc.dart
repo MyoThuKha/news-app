@@ -19,6 +19,7 @@ class SaveStatusBloc extends Bloc<SavedStatusEvent, SavedStatusState> {
        _deleteNewsUseCase = deleteUseCase,
        super(_Initial()) {
     on<_SaveStatusLoaded>(_onSaveStatusLoaded);
+    on<_SaveToggled>(_onSaveToggled);
     on<_SaveAdded>(_onSaveAdded);
     on<_SaveRemoved>(_onSaveRemoved);
   }
@@ -38,7 +39,29 @@ class SaveStatusBloc extends Bloc<SavedStatusEvent, SavedStatusState> {
     emit(.success(isSaved: result != null));
   }
 
-  FutureOr<void> _onSaveAdded(
+  void _onSaveToggled(
+    _SaveToggled event,
+    Emitter<SavedStatusState> emit,
+  ) async {
+    bool isSaved = false;
+
+    state.maybeWhen(
+      orElse: () => isSaved = false,
+      success: (val) => isSaved = val,
+      updated: (val) => isSaved = val,
+    );
+
+    print(isSaved);
+
+    if (isSaved) {
+      await _deleteNewsUseCase.call(DeleteNewsParams(news: event.news));
+    } else {
+      await _saveNewsUseCase.call(SaveNewsParams(news: event.news));
+    }
+    emit(.updated(isSaved: !isSaved));
+  }
+
+    FutureOr<void> _onSaveAdded(
     _SaveAdded event,
     Emitter<SavedStatusState> emit,
   ) {

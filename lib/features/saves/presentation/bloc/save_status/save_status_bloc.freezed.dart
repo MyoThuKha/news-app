@@ -55,14 +55,15 @@ extension SavedStatusEventPatterns on SavedStatusEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _SaveStatusLoaded value)?  saveStatusLoaded,TResult Function( _SaveRemoved value)?  saveRemoved,TResult Function( _SaveAdded value)?  saveAdded,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _SaveStatusLoaded value)?  saveStatusLoaded,TResult Function( _SaveRemoved value)?  saveRemoved,TResult Function( _SaveAdded value)?  saveAdded,TResult Function( _SaveToggled value)?  saveToggled,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _SaveStatusLoaded() when saveStatusLoaded != null:
 return saveStatusLoaded(_that);case _SaveRemoved() when saveRemoved != null:
 return saveRemoved(_that);case _SaveAdded() when saveAdded != null:
-return saveAdded(_that);case _:
+return saveAdded(_that);case _SaveToggled() when saveToggled != null:
+return saveToggled(_that);case _:
   return orElse();
 
 }
@@ -80,14 +81,15 @@ return saveAdded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _SaveStatusLoaded value)  saveStatusLoaded,required TResult Function( _SaveRemoved value)  saveRemoved,required TResult Function( _SaveAdded value)  saveAdded,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _SaveStatusLoaded value)  saveStatusLoaded,required TResult Function( _SaveRemoved value)  saveRemoved,required TResult Function( _SaveAdded value)  saveAdded,required TResult Function( _SaveToggled value)  saveToggled,}){
 final _that = this;
 switch (_that) {
 case _Started():
 return started(_that);case _SaveStatusLoaded():
 return saveStatusLoaded(_that);case _SaveRemoved():
 return saveRemoved(_that);case _SaveAdded():
-return saveAdded(_that);case _:
+return saveAdded(_that);case _SaveToggled():
+return saveToggled(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -104,14 +106,15 @@ return saveAdded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _SaveStatusLoaded value)?  saveStatusLoaded,TResult? Function( _SaveRemoved value)?  saveRemoved,TResult? Function( _SaveAdded value)?  saveAdded,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _SaveStatusLoaded value)?  saveStatusLoaded,TResult? Function( _SaveRemoved value)?  saveRemoved,TResult? Function( _SaveAdded value)?  saveAdded,TResult? Function( _SaveToggled value)?  saveToggled,}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _SaveStatusLoaded() when saveStatusLoaded != null:
 return saveStatusLoaded(_that);case _SaveRemoved() when saveRemoved != null:
 return saveRemoved(_that);case _SaveAdded() when saveAdded != null:
-return saveAdded(_that);case _:
+return saveAdded(_that);case _SaveToggled() when saveToggled != null:
+return saveToggled(_that);case _:
   return null;
 
 }
@@ -128,13 +131,14 @@ return saveAdded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String url)?  saveStatusLoaded,TResult Function( NewsEntity news)?  saveRemoved,TResult Function( NewsEntity news)?  saveAdded,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String url)?  saveStatusLoaded,TResult Function( NewsEntity news)?  saveRemoved,TResult Function( NewsEntity news)?  saveAdded,TResult Function( NewsEntity news)?  saveToggled,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _SaveStatusLoaded() when saveStatusLoaded != null:
 return saveStatusLoaded(_that.url);case _SaveRemoved() when saveRemoved != null:
 return saveRemoved(_that.news);case _SaveAdded() when saveAdded != null:
-return saveAdded(_that.news);case _:
+return saveAdded(_that.news);case _SaveToggled() when saveToggled != null:
+return saveToggled(_that.news);case _:
   return orElse();
 
 }
@@ -152,13 +156,14 @@ return saveAdded(_that.news);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String url)  saveStatusLoaded,required TResult Function( NewsEntity news)  saveRemoved,required TResult Function( NewsEntity news)  saveAdded,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String url)  saveStatusLoaded,required TResult Function( NewsEntity news)  saveRemoved,required TResult Function( NewsEntity news)  saveAdded,required TResult Function( NewsEntity news)  saveToggled,}) {final _that = this;
 switch (_that) {
 case _Started():
 return started();case _SaveStatusLoaded():
 return saveStatusLoaded(_that.url);case _SaveRemoved():
 return saveRemoved(_that.news);case _SaveAdded():
-return saveAdded(_that.news);case _:
+return saveAdded(_that.news);case _SaveToggled():
+return saveToggled(_that.news);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -175,13 +180,14 @@ return saveAdded(_that.news);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String url)?  saveStatusLoaded,TResult? Function( NewsEntity news)?  saveRemoved,TResult? Function( NewsEntity news)?  saveAdded,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String url)?  saveStatusLoaded,TResult? Function( NewsEntity news)?  saveRemoved,TResult? Function( NewsEntity news)?  saveAdded,TResult? Function( NewsEntity news)?  saveToggled,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _SaveStatusLoaded() when saveStatusLoaded != null:
 return saveStatusLoaded(_that.url);case _SaveRemoved() when saveRemoved != null:
 return saveRemoved(_that.news);case _SaveAdded() when saveAdded != null:
-return saveAdded(_that.news);case _:
+return saveAdded(_that.news);case _SaveToggled() when saveToggled != null:
+return saveToggled(_that.news);case _:
   return null;
 
 }
@@ -420,6 +426,81 @@ class __$SaveAddedCopyWithImpl<$Res>
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? news = null,}) {
   return _then(_SaveAdded(
+null == news ? _self.news : news // ignore: cast_nullable_to_non_nullable
+as NewsEntity,
+  ));
+}
+
+/// Create a copy of SavedStatusEvent
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$NewsEntityCopyWith<$Res> get news {
+  
+  return $NewsEntityCopyWith<$Res>(_self.news, (value) {
+    return _then(_self.copyWith(news: value));
+  });
+}
+}
+
+/// @nodoc
+
+
+class _SaveToggled implements SavedStatusEvent {
+  const _SaveToggled(this.news);
+  
+
+ final  NewsEntity news;
+
+/// Create a copy of SavedStatusEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SaveToggledCopyWith<_SaveToggled> get copyWith => __$SaveToggledCopyWithImpl<_SaveToggled>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SaveToggled&&(identical(other.news, news) || other.news == news));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,news);
+
+@override
+String toString() {
+  return 'SavedStatusEvent.saveToggled(news: $news)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$SaveToggledCopyWith<$Res> implements $SavedStatusEventCopyWith<$Res> {
+  factory _$SaveToggledCopyWith(_SaveToggled value, $Res Function(_SaveToggled) _then) = __$SaveToggledCopyWithImpl;
+@useResult
+$Res call({
+ NewsEntity news
+});
+
+
+$NewsEntityCopyWith<$Res> get news;
+
+}
+/// @nodoc
+class __$SaveToggledCopyWithImpl<$Res>
+    implements _$SaveToggledCopyWith<$Res> {
+  __$SaveToggledCopyWithImpl(this._self, this._then);
+
+  final _SaveToggled _self;
+  final $Res Function(_SaveToggled) _then;
+
+/// Create a copy of SavedStatusEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? news = null,}) {
+  return _then(_SaveToggled(
 null == news ? _self.news : news // ignore: cast_nullable_to_non_nullable
 as NewsEntity,
   ));
