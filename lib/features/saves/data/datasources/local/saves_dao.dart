@@ -1,48 +1,46 @@
 import 'package:drift/drift.dart';
 import 'package:news/config/database/app_database.dart';
-import 'package:news/config/database/tables/tables.dart';
+import 'package:news/config/database/tables/saves_table.dart';
+import 'package:news/features/saves/data/models/models.dart';
 
 part 'saves_dao.g.dart';
 
 @DriftAccessor(tables: [SavesTable])
 class SavesDao extends DatabaseAccessor<AppDatabase> with _$SavesDaoMixin {
-  SavesDao(super.attachedDatabase);
+  SavesDao(super.db);
 
-  // MARK: News operations
-  Future<List<SavesTableData>> getAllSaves({int? limit}) {
-    final query = select(savesTable)
-      ..orderBy([
-        (t) => OrderingTerm(expression: t.savedAt, mode: OrderingMode.desc),
-      ]);
-
-    if (limit != null) query.limit(limit);
-
-    return query.get();
-  }
-
-  Stream<List<SavesTableData>> watchAllSaves({int? limit}) {
-    final query = select(savesTable)
-      ..orderBy([
-        (t) => OrderingTerm(expression: t.savedAt, mode: OrderingMode.desc),
-      ]);
-
-    if (limit != null) query.limit(limit);
-    return query.watch();
-  }
-
-  Future<void> insertSave(SavesTableData news) async {
+  Future<void> saveNews(SavesTableCompanion news) async {
     await into(savesTable).insertOnConflictUpdate(news);
   }
 
-  Future<void> insertBulkSaves(List<SavesTableData> newsList) async {
-    await transaction(() async {
-      for (final news in newsList) {
-        await into(savesTable).insertOnConflictUpdate(news);
-      }
-    });
+  Future<void> deleteNews(SavesTableCompanion news) {
+    return delete(savesTable).delete(news);
   }
 
-  Future<void> clearAllSaves() async {
-    await delete(savesTable).go();
+  Stream<List<SavedNewsWithSource>> watchSavedNews() {
+    final query =
+        select(savesTable).join([
+          innerJoin(newsTable, newsTable.url.equalsExp(savesTable.newsId)),
+          leftOuterJoin(
+            sourcesTable,
+            sourcesTable.sourceId.equalsExp(newsTable.sourceId),
+          ),
+        ])..orderBy([
+          OrderingTerm(expression: savesTable.savedAt, mode: OrderingMode.desc),
+        ]);
+
+    return query.watch().map((rows) {
+      return rows.map((row) {
+        final saved = row.readTable(savesTable);
+        final news = row.readTable(newsTable);
+        final source = row.readTableOrNull(sourcesTable);
+
+        return SavedNewsWithSource(
+          news: news,
+          source: source,
+          savedAt: saved.savedAt,
+        );
+      }).toList();
+    });
   }
 }
