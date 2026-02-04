@@ -19,4 +19,5 @@ extension SourceMapper on SourceModel {
       name: Value(name ?? ''),
     );
   }
+
 }

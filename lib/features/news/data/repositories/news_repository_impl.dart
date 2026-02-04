@@ -18,6 +18,47 @@ class NewsRepositoryImpl implements NewsRepository {
   late final SourcesDao _sourcesTable;
   late final NewsApiService _newsApiService;
 
+
+  @override
+  Future<PaginatedNewsEntity> fetchFeaturedNews(
+    int page, {
+    int pageSize = 1,
+  }) async {
+    try {
+      final paginatedNews = await _newsApiService.fetchHeadlineNews(
+        page,
+        pageSize: pageSize,
+      );
+
+      final List<NewsTableCompanion> newsCompanions = [];
+      final List<SourcesTableCompanion> sourcesCompanions = [];
+
+      for (final news in paginatedNews.articles) {
+        String? sourceId = news.source?.id;
+
+        if (news.source != null) {
+          final sourceCompanion = news.source!.toTableCompanion();
+          sourcesCompanions.add(sourceCompanion);
+        }
+        final newsCompanion = news.toTableCompanion(sourceId, isFeatured: true);
+        newsCompanions.add(newsCompanion);
+      }
+
+      // db insert operations
+      if (sourcesCompanions.isNotEmpty) {
+        await _sourcesTable.insertBulkSources(sourcesCompanions);
+      }
+      if (newsCompanions.isNotEmpty) {
+        await _newsTable.insertBulkNews(newsCompanions);
+      }
+
+      return paginatedNews.toEntity(page, pageSize);
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+
   @override
   Future<PaginatedNewsEntity> fetchNews(int page, {int pageSize = 20}) async {
     try {
@@ -62,8 +103,15 @@ class NewsRepositoryImpl implements NewsRepository {
   }
 
   @override
+  Stream<NewsEntity> getFeaturedNews() {
+    return _newsTable.watchFeaturedNews().map((news) {
+      return news.toEntity();
+    });
+  }
+
+  @override
   Stream<NewsEntity> getNewsDetail(String url) {
-    return _newsTable.watchNewsWithSource(identifier: url).map((news) {
+    return _newsTable.watchNews(identifier: url).map((news) {
       return news.toEntity();
     });
   }

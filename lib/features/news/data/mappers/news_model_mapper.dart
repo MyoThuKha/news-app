@@ -18,11 +18,14 @@ extension NewsModelMapper on NewsModel {
       urlToImage: urlToImage ?? '',
       publishedAt: DateFormatUtil.parseUtc(publishedAt),
       content: content ?? '',
-      cachedAt: null, 
+      cachedAt: null,
     );
   }
 
-  NewsTableCompanion toTableCompanion(String? sourceId) {
+  NewsTableCompanion toTableCompanion(
+    String? sourceId, {
+    bool isFeatured = false,
+  }) {
     return NewsTableCompanion(
       sourceId: Value(sourceId),
       author: Value(author),
@@ -31,6 +34,7 @@ extension NewsModelMapper on NewsModel {
       url: Value(url),
       urlToImage: Value(urlToImage),
       publishedAt: Value(DateFormatUtil.parseUtc(publishedAt)),
+      isFeatured: Value(isFeatured),
       content: Value(content),
     );
   }

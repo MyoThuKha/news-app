@@ -408,6 +408,21 @@ class $NewsTableTable extends NewsTable
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _isFeaturedMeta = const VerificationMeta(
+    'isFeatured',
+  );
+  @override
+  late final GeneratedColumn<bool> isFeatured = GeneratedColumn<bool>(
+    'is_featured',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_featured" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
   );
@@ -441,6 +456,7 @@ class $NewsTableTable extends NewsTable
     urlToImage,
     publishedAt,
     content,
+    isFeatured,
     createdAt,
     updatedAt,
   ];
@@ -513,6 +529,12 @@ class $NewsTableTable extends NewsTable
         content.isAcceptableOrUnknown(data['content']!, _contentMeta),
       );
     }
+    if (data.containsKey('is_featured')) {
+      context.handle(
+        _isFeaturedMeta,
+        isFeatured.isAcceptableOrUnknown(data['is_featured']!, _isFeaturedMeta),
+      );
+    }
     if (data.containsKey('created_at')) {
       context.handle(
         _createdAtMeta,
@@ -566,6 +588,10 @@ class $NewsTableTable extends NewsTable
         DriftSqlType.string,
         data['${effectivePrefix}content'],
       ),
+      isFeatured: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_featured'],
+      )!,
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -592,6 +618,7 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
   final String? urlToImage;
   final DateTime? publishedAt;
   final String? content;
+  final bool isFeatured;
   final DateTime createdAt;
   final DateTime? updatedAt;
   const NewsTableData({
@@ -603,6 +630,7 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
     this.urlToImage,
     this.publishedAt,
     this.content,
+    required this.isFeatured,
     required this.createdAt,
     this.updatedAt,
   });
@@ -633,6 +661,7 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
     if (!nullToAbsent || content != null) {
       map['content'] = Variable<String>(content);
     }
+    map['is_featured'] = Variable<bool>(isFeatured);
     map['created_at'] = Variable<DateTime>(createdAt);
     if (!nullToAbsent || updatedAt != null) {
       map['updated_at'] = Variable<DateTime>(updatedAt);
@@ -664,6 +693,7 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
       content: content == null && nullToAbsent
           ? const Value.absent()
           : Value(content),
+      isFeatured: Value(isFeatured),
       createdAt: Value(createdAt),
       updatedAt: updatedAt == null && nullToAbsent
           ? const Value.absent()
@@ -685,6 +715,7 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
       urlToImage: serializer.fromJson<String?>(json['urlToImage']),
       publishedAt: serializer.fromJson<DateTime?>(json['publishedAt']),
       content: serializer.fromJson<String?>(json['content']),
+      isFeatured: serializer.fromJson<bool>(json['isFeatured']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
     );
@@ -701,6 +732,7 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
       'urlToImage': serializer.toJson<String?>(urlToImage),
       'publishedAt': serializer.toJson<DateTime?>(publishedAt),
       'content': serializer.toJson<String?>(content),
+      'isFeatured': serializer.toJson<bool>(isFeatured),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime?>(updatedAt),
     };
@@ -715,6 +747,7 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
     Value<String?> urlToImage = const Value.absent(),
     Value<DateTime?> publishedAt = const Value.absent(),
     Value<String?> content = const Value.absent(),
+    bool? isFeatured,
     DateTime? createdAt,
     Value<DateTime?> updatedAt = const Value.absent(),
   }) => NewsTableData(
@@ -726,6 +759,7 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
     urlToImage: urlToImage.present ? urlToImage.value : this.urlToImage,
     publishedAt: publishedAt.present ? publishedAt.value : this.publishedAt,
     content: content.present ? content.value : this.content,
+    isFeatured: isFeatured ?? this.isFeatured,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
   );
@@ -745,6 +779,9 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
           ? data.publishedAt.value
           : this.publishedAt,
       content: data.content.present ? data.content.value : this.content,
+      isFeatured: data.isFeatured.present
+          ? data.isFeatured.value
+          : this.isFeatured,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
@@ -761,6 +798,7 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
           ..write('urlToImage: $urlToImage, ')
           ..write('publishedAt: $publishedAt, ')
           ..write('content: $content, ')
+          ..write('isFeatured: $isFeatured, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -777,6 +815,7 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
     urlToImage,
     publishedAt,
     content,
+    isFeatured,
     createdAt,
     updatedAt,
   );
@@ -792,6 +831,7 @@ class NewsTableData extends DataClass implements Insertable<NewsTableData> {
           other.urlToImage == this.urlToImage &&
           other.publishedAt == this.publishedAt &&
           other.content == this.content &&
+          other.isFeatured == this.isFeatured &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt);
 }
@@ -805,6 +845,7 @@ class NewsTableCompanion extends UpdateCompanion<NewsTableData> {
   final Value<String?> urlToImage;
   final Value<DateTime?> publishedAt;
   final Value<String?> content;
+  final Value<bool> isFeatured;
   final Value<DateTime> createdAt;
   final Value<DateTime?> updatedAt;
   final Value<int> rowid;
@@ -817,6 +858,7 @@ class NewsTableCompanion extends UpdateCompanion<NewsTableData> {
     this.urlToImage = const Value.absent(),
     this.publishedAt = const Value.absent(),
     this.content = const Value.absent(),
+    this.isFeatured = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -830,6 +872,7 @@ class NewsTableCompanion extends UpdateCompanion<NewsTableData> {
     this.urlToImage = const Value.absent(),
     this.publishedAt = const Value.absent(),
     this.content = const Value.absent(),
+    this.isFeatured = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -843,6 +886,7 @@ class NewsTableCompanion extends UpdateCompanion<NewsTableData> {
     Expression<String>? urlToImage,
     Expression<DateTime>? publishedAt,
     Expression<String>? content,
+    Expression<bool>? isFeatured,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
     Expression<int>? rowid,
@@ -856,6 +900,7 @@ class NewsTableCompanion extends UpdateCompanion<NewsTableData> {
       if (urlToImage != null) 'url_to_image': urlToImage,
       if (publishedAt != null) 'published_at': publishedAt,
       if (content != null) 'content': content,
+      if (isFeatured != null) 'is_featured': isFeatured,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (rowid != null) 'rowid': rowid,
@@ -871,6 +916,7 @@ class NewsTableCompanion extends UpdateCompanion<NewsTableData> {
     Value<String?>? urlToImage,
     Value<DateTime?>? publishedAt,
     Value<String?>? content,
+    Value<bool>? isFeatured,
     Value<DateTime>? createdAt,
     Value<DateTime?>? updatedAt,
     Value<int>? rowid,
@@ -884,6 +930,7 @@ class NewsTableCompanion extends UpdateCompanion<NewsTableData> {
       urlToImage: urlToImage ?? this.urlToImage,
       publishedAt: publishedAt ?? this.publishedAt,
       content: content ?? this.content,
+      isFeatured: isFeatured ?? this.isFeatured,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       rowid: rowid ?? this.rowid,
@@ -917,6 +964,9 @@ class NewsTableCompanion extends UpdateCompanion<NewsTableData> {
     if (content.present) {
       map['content'] = Variable<String>(content.value);
     }
+    if (isFeatured.present) {
+      map['is_featured'] = Variable<bool>(isFeatured.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
@@ -940,6 +990,7 @@ class NewsTableCompanion extends UpdateCompanion<NewsTableData> {
           ..write('urlToImage: $urlToImage, ')
           ..write('publishedAt: $publishedAt, ')
           ..write('content: $content, ')
+          ..write('isFeatured: $isFeatured, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('rowid: $rowid')
@@ -1476,6 +1527,7 @@ typedef $$NewsTableTableCreateCompanionBuilder =
       Value<String?> urlToImage,
       Value<DateTime?> publishedAt,
       Value<String?> content,
+      Value<bool> isFeatured,
       Value<DateTime> createdAt,
       Value<DateTime?> updatedAt,
       Value<int> rowid,
@@ -1490,6 +1542,7 @@ typedef $$NewsTableTableUpdateCompanionBuilder =
       Value<String?> urlToImage,
       Value<DateTime?> publishedAt,
       Value<String?> content,
+      Value<bool> isFeatured,
       Value<DateTime> createdAt,
       Value<DateTime?> updatedAt,
       Value<int> rowid,
@@ -1578,6 +1631,11 @@ class $$NewsTableTableFilterComposer
 
   ColumnFilters<String> get content => $composableBuilder(
     column: $table.content,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isFeatured => $composableBuilder(
+    column: $table.isFeatured,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1684,6 +1742,11 @@ class $$NewsTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<bool> get isFeatured => $composableBuilder(
+    column: $table.isFeatured,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
@@ -1753,6 +1816,11 @@ class $$NewsTableTableAnnotationComposer
 
   GeneratedColumn<String> get content =>
       $composableBuilder(column: $table.content, builder: (column) => column);
+
+  GeneratedColumn<bool> get isFeatured => $composableBuilder(
+    column: $table.isFeatured,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -1845,6 +1913,7 @@ class $$NewsTableTableTableManager
                 Value<String?> urlToImage = const Value.absent(),
                 Value<DateTime?> publishedAt = const Value.absent(),
                 Value<String?> content = const Value.absent(),
+                Value<bool> isFeatured = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime?> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -1857,6 +1926,7 @@ class $$NewsTableTableTableManager
                 urlToImage: urlToImage,
                 publishedAt: publishedAt,
                 content: content,
+                isFeatured: isFeatured,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 rowid: rowid,
@@ -1871,6 +1941,7 @@ class $$NewsTableTableTableManager
                 Value<String?> urlToImage = const Value.absent(),
                 Value<DateTime?> publishedAt = const Value.absent(),
                 Value<String?> content = const Value.absent(),
+                Value<bool> isFeatured = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime?> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -1883,6 +1954,7 @@ class $$NewsTableTableTableManager
                 urlToImage: urlToImage,
                 publishedAt: publishedAt,
                 content: content,
+                isFeatured: isFeatured,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 rowid: rowid,

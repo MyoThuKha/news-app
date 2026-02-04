@@ -12,6 +12,7 @@ class NewsTable extends Table {
   DateTimeColumn get publishedAt => dateTime().nullable()();
   TextColumn get content => text().nullable()();
 
+  BoolColumn get isFeatured => boolean().withDefault(const Constant(false))();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().nullable()();
 

@@ -9,29 +9,55 @@ part 'news_dao.g.dart';
 class NewsDao extends DatabaseAccessor<AppDatabase> with _$NewsDaoMixin {
   NewsDao(super.attachedDatabase);
 
-  Future<List<NewsTableData>> getAllNews({int? limit}) {
-    final query = select(newsTable)
+
+  Stream<List<NewsWithSource>> watchAllFeaturedNews() {
+    final baseQuery = select(newsTable)
+      ..where((t) => t.isFeatured.equals(true))
       ..orderBy([
         (t) => OrderingTerm(expression: t.publishedAt, mode: OrderingMode.desc),
       ]);
 
-    if (limit != null) query.limit(limit);
+    final joined = baseQuery.join([
+      leftOuterJoin(
+        sourcesTable,
+        sourcesTable.sourceId.equalsExp(newsTable.sourceId),
+      ),
+    ]);
 
-    return query.get();
+    return joined.watch().map((rows) {
+      return rows.map((row) {
+        final news = row.readTable(newsTable);
+        final source = row.readTableOrNull(sourcesTable);
+
+        return NewsWithSource(news: news, source: source);
+      }).toList();
+    });
   }
 
-  Stream<NewsTableData> watchNews({required String idendifier}) {
-    final query = select(newsTable)
-      ..where((t) => t.url.equals(idendifier))
+  Stream<NewsWithSource> watchFeaturedNews() {
+    final baseQuery = select(newsTable)
+      ..where((t) => t.isFeatured.equals(true))
       ..orderBy([
         (t) => OrderingTerm(expression: t.publishedAt, mode: OrderingMode.desc),
-      ])
-      ..limit(1);
+      ]);
 
-    return query.watchSingle();
+    final joined = baseQuery.join([
+      leftOuterJoin(
+        sourcesTable,
+        sourcesTable.sourceId.equalsExp(newsTable.sourceId),
+      ),
+    ]);
+
+    return joined.watchSingle().map((row) {
+      final news = row.readTable(newsTable);
+      final source = row.readTableOrNull(sourcesTable);
+
+      return NewsWithSource(news: news, source: source);
+    });
   }
 
-  Stream<NewsWithSource> watchNewsWithSource({required String identifier}) {
+
+  Stream<NewsWithSource> watchNews({required String identifier}) {
     final baseQuery = select(newsTable)
       ..where((t) => t.url.equals(identifier))
       ..limit(1);
