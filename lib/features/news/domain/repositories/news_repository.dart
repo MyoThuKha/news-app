@@ -2,5 +2,5 @@ import 'package:news/features/news/domain/entities/entities.dart';
 
 abstract class NewsRepository {
   Stream<List<NewsEntity>> getNews();
-  Future<void> fetchNews();
+  Future<PagedArticles> fetchNews(int page, {int pageSize});
 }

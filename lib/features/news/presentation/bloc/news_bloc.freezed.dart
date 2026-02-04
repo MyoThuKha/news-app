@@ -55,12 +55,14 @@ extension NewsEventPatterns on NewsEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _NewsLoaded value)?  newsLoaded,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _NewsLoaded value)?  newsLoaded,TResult Function( _NewsRefreshed value)?  newsRefreshed,TResult Function( _NewsLoadMore value)?  loadMore,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _NewsLoaded() when newsLoaded != null:
-return newsLoaded(_that);case _:
+return newsLoaded(_that);case _NewsRefreshed() when newsRefreshed != null:
+return newsRefreshed(_that);case _NewsLoadMore() when loadMore != null:
+return loadMore(_that);case _:
   return orElse();
 
 }
@@ -78,12 +80,14 @@ return newsLoaded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _NewsLoaded value)  newsLoaded,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _NewsLoaded value)  newsLoaded,required TResult Function( _NewsRefreshed value)  newsRefreshed,required TResult Function( _NewsLoadMore value)  loadMore,}){
 final _that = this;
 switch (_that) {
 case _Started():
 return started(_that);case _NewsLoaded():
-return newsLoaded(_that);case _:
+return newsLoaded(_that);case _NewsRefreshed():
+return newsRefreshed(_that);case _NewsLoadMore():
+return loadMore(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -100,12 +104,14 @@ return newsLoaded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _NewsLoaded value)?  newsLoaded,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _NewsLoaded value)?  newsLoaded,TResult? Function( _NewsRefreshed value)?  newsRefreshed,TResult? Function( _NewsLoadMore value)?  loadMore,}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _NewsLoaded() when newsLoaded != null:
-return newsLoaded(_that);case _:
+return newsLoaded(_that);case _NewsRefreshed() when newsRefreshed != null:
+return newsRefreshed(_that);case _NewsLoadMore() when loadMore != null:
+return loadMore(_that);case _:
   return null;
 
 }
@@ -122,11 +128,13 @@ return newsLoaded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function()?  newsLoaded,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function()?  newsLoaded,TResult Function()?  newsRefreshed,TResult Function()?  loadMore,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _NewsLoaded() when newsLoaded != null:
-return newsLoaded();case _:
+return newsLoaded();case _NewsRefreshed() when newsRefreshed != null:
+return newsRefreshed();case _NewsLoadMore() when loadMore != null:
+return loadMore();case _:
   return orElse();
 
 }
@@ -144,11 +152,13 @@ return newsLoaded();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function()  newsLoaded,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function()  newsLoaded,required TResult Function()  newsRefreshed,required TResult Function()  loadMore,}) {final _that = this;
 switch (_that) {
 case _Started():
 return started();case _NewsLoaded():
-return newsLoaded();case _:
+return newsLoaded();case _NewsRefreshed():
+return newsRefreshed();case _NewsLoadMore():
+return loadMore();case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -165,11 +175,13 @@ return newsLoaded();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function()?  newsLoaded,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function()?  newsLoaded,TResult? Function()?  newsRefreshed,TResult? Function()?  loadMore,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _NewsLoaded() when newsLoaded != null:
-return newsLoaded();case _:
+return newsLoaded();case _NewsRefreshed() when newsRefreshed != null:
+return newsRefreshed();case _NewsLoadMore() when loadMore != null:
+return loadMore();case _:
   return null;
 
 }
@@ -242,6 +254,70 @@ String toString() {
 
 
 /// @nodoc
+
+
+class _NewsRefreshed implements NewsEvent {
+  const _NewsRefreshed();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NewsRefreshed);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'NewsEvent.newsRefreshed()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _NewsLoadMore implements NewsEvent {
+  const _NewsLoadMore();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NewsLoadMore);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'NewsEvent.loadMore()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
 mixin _$NewsState {
 
 
@@ -285,12 +361,14 @@ extension NewsStatePatterns on NewsState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( Success value)?  success,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Success value)?  success,TResult Function( _Error value)?  error,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial(_that);case Success() when success != null:
-return success(_that);case _:
+return initial(_that);case _Loading() when loading != null:
+return loading(_that);case _Success() when success != null:
+return success(_that);case _Error() when error != null:
+return error(_that);case _:
   return orElse();
 
 }
@@ -308,12 +386,14 @@ return success(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( Success value)  success,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Success value)  success,required TResult Function( _Error value)  error,}){
 final _that = this;
 switch (_that) {
 case _Initial():
-return initial(_that);case Success():
-return success(_that);case _:
+return initial(_that);case _Loading():
+return loading(_that);case _Success():
+return success(_that);case _Error():
+return error(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -330,12 +410,14 @@ return success(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( Success value)?  success,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Success value)?  success,TResult? Function( _Error value)?  error,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial(_that);case Success() when success != null:
-return success(_that);case _:
+return initial(_that);case _Loading() when loading != null:
+return loading(_that);case _Success() when success != null:
+return success(_that);case _Error() when error != null:
+return error(_that);case _:
   return null;
 
 }
@@ -352,11 +434,13 @@ return success(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( List<NewsEntity> news)?  success,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<NewsEntity> news,  bool hasReachedMax,  bool isMoreLoading)?  success,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial();case Success() when success != null:
-return success(_that.news);case _:
+return initial();case _Loading() when loading != null:
+return loading();case _Success() when success != null:
+return success(_that.news,_that.hasReachedMax,_that.isMoreLoading);case _Error() when error != null:
+return error(_that.message);case _:
   return orElse();
 
 }
@@ -374,11 +458,13 @@ return success(_that.news);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( List<NewsEntity> news)  success,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<NewsEntity> news,  bool hasReachedMax,  bool isMoreLoading)  success,required TResult Function( String message)  error,}) {final _that = this;
 switch (_that) {
 case _Initial():
-return initial();case Success():
-return success(_that.news);case _:
+return initial();case _Loading():
+return loading();case _Success():
+return success(_that.news,_that.hasReachedMax,_that.isMoreLoading);case _Error():
+return error(_that.message);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -395,11 +481,13 @@ return success(_that.news);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( List<NewsEntity> news)?  success,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<NewsEntity> news,  bool hasReachedMax,  bool isMoreLoading)?  success,TResult? Function( String message)?  error,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial();case Success() when success != null:
-return success(_that.news);case _:
+return initial();case _Loading() when loading != null:
+return loading();case _Success() when success != null:
+return success(_that.news,_that.hasReachedMax,_that.isMoreLoading);case _Error() when error != null:
+return error(_that.message);case _:
   return null;
 
 }
@@ -442,8 +530,40 @@ String toString() {
 /// @nodoc
 
 
-class Success implements NewsState {
-  const Success({required final  List<NewsEntity> news}): _news = news;
+class _Loading implements NewsState {
+  const _Loading();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loading);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'NewsState.loading()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _Success implements NewsState {
+  const _Success({required final  List<NewsEntity> news, this.hasReachedMax = false, this.isMoreLoading = false}): _news = news;
   
 
  final  List<NewsEntity> _news;
@@ -453,38 +573,40 @@ class Success implements NewsState {
   return EqualUnmodifiableListView(_news);
 }
 
+@JsonKey() final  bool hasReachedMax;
+@JsonKey() final  bool isMoreLoading;
 
 /// Create a copy of NewsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$SuccessCopyWith<Success> get copyWith => _$SuccessCopyWithImpl<Success>(this, _$identity);
+_$SuccessCopyWith<_Success> get copyWith => __$SuccessCopyWithImpl<_Success>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Success&&const DeepCollectionEquality().equals(other._news, _news));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Success&&const DeepCollectionEquality().equals(other._news, _news)&&(identical(other.hasReachedMax, hasReachedMax) || other.hasReachedMax == hasReachedMax)&&(identical(other.isMoreLoading, isMoreLoading) || other.isMoreLoading == isMoreLoading));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_news));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_news),hasReachedMax,isMoreLoading);
 
 @override
 String toString() {
-  return 'NewsState.success(news: $news)';
+  return 'NewsState.success(news: $news, hasReachedMax: $hasReachedMax, isMoreLoading: $isMoreLoading)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $SuccessCopyWith<$Res> implements $NewsStateCopyWith<$Res> {
-  factory $SuccessCopyWith(Success value, $Res Function(Success) _then) = _$SuccessCopyWithImpl;
+abstract mixin class _$SuccessCopyWith<$Res> implements $NewsStateCopyWith<$Res> {
+  factory _$SuccessCopyWith(_Success value, $Res Function(_Success) _then) = __$SuccessCopyWithImpl;
 @useResult
 $Res call({
- List<NewsEntity> news
+ List<NewsEntity> news, bool hasReachedMax, bool isMoreLoading
 });
 
 
@@ -492,19 +614,87 @@ $Res call({
 
 }
 /// @nodoc
-class _$SuccessCopyWithImpl<$Res>
-    implements $SuccessCopyWith<$Res> {
-  _$SuccessCopyWithImpl(this._self, this._then);
+class __$SuccessCopyWithImpl<$Res>
+    implements _$SuccessCopyWith<$Res> {
+  __$SuccessCopyWithImpl(this._self, this._then);
 
-  final Success _self;
-  final $Res Function(Success) _then;
+  final _Success _self;
+  final $Res Function(_Success) _then;
 
 /// Create a copy of NewsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? news = null,}) {
-  return _then(Success(
+@pragma('vm:prefer-inline') $Res call({Object? news = null,Object? hasReachedMax = null,Object? isMoreLoading = null,}) {
+  return _then(_Success(
 news: null == news ? _self._news : news // ignore: cast_nullable_to_non_nullable
-as List<NewsEntity>,
+as List<NewsEntity>,hasReachedMax: null == hasReachedMax ? _self.hasReachedMax : hasReachedMax // ignore: cast_nullable_to_non_nullable
+as bool,isMoreLoading: null == isMoreLoading ? _self.isMoreLoading : isMoreLoading // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _Error implements NewsState {
+  const _Error({required this.message});
+  
+
+ final  String message;
+
+/// Create a copy of NewsState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ErrorCopyWith<_Error> get copyWith => __$ErrorCopyWithImpl<_Error>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Error&&(identical(other.message, message) || other.message == message));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,message);
+
+@override
+String toString() {
+  return 'NewsState.error(message: $message)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ErrorCopyWith<$Res> implements $NewsStateCopyWith<$Res> {
+  factory _$ErrorCopyWith(_Error value, $Res Function(_Error) _then) = __$ErrorCopyWithImpl;
+@useResult
+$Res call({
+ String message
+});
+
+
+
+
+}
+/// @nodoc
+class __$ErrorCopyWithImpl<$Res>
+    implements _$ErrorCopyWith<$Res> {
+  __$ErrorCopyWithImpl(this._self, this._then);
+
+  final _Error _self;
+  final $Res Function(_Error) _then;
+
+/// Create a copy of NewsState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+  return _then(_Error(
+message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

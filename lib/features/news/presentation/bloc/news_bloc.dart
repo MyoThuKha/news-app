@@ -15,21 +15,53 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
        _getNewsUseCase = getNewsUseCase,
        super(_Initial()) {
     on<_NewsLoaded>(_newsLoaded);
+    on<_NewsRefreshed>(_newsRefreshed);
+    on<_NewsLoadMore>(_newsLoadMore);
   }
 
   late final FetchNewsUseCase _fetchNewsUseCase;
   late final GetNewsUseCase _getNewsUseCase;
 
-  void _newsLoaded(_NewsLoaded event, Emitter<NewsState> emit) async {
-    final stream = _getNewsUseCase.call(NoParams());
-    _fetchNewsUseCase.call(NoParams());
+  int _page = 1;
+  bool _hasMore = true;
 
-    await emit.forEach(
-      stream,
-      onData: (news) {
-        return Success(news: news);
-      },
+  void _newsRefreshed(_NewsRefreshed event, Emitter<NewsState> emit) async {
+    _page = 1;
+    emit(const .loading());
+    await _fetchNewsUseCase.call(FetchNewsParams(page: _page));
+  }
+
+  void _newsLoadMore(_NewsLoadMore event, Emitter<NewsState> emit) async {
+    if (state is! _Success) return;
+    final newsState = state as _Success;
+
+    if (!_hasMore) {
+      emit(newsState.copyWith(hasReachedMax: true));
+      return;
+    }
+
+    emit(newsState.copyWith(isMoreLoading: true));
+    _page++;
+    final pagedArticles = await _fetchNewsUseCase.call(
+      FetchNewsParams(page: _page),
     );
+    _hasMore = pagedArticles.hasMore;
+    emit(newsState.copyWith(isMoreLoading: false));
+  }
+
+  void _newsLoaded(_NewsLoaded event, Emitter<NewsState> emit) async {
+    emit(.loading());
+    try {
+      final pagedArticles = await _fetchNewsUseCase.call(
+        FetchNewsParams(page: _page),
+      );
+      _hasMore = pagedArticles.hasMore;
+
+      final stream = _getNewsUseCase.call(NoParams());
+      await emit.forEach(stream, onData: (news) => .success(news: news));
+    } catch (e) {
+      emit(_Error(message: e.toString()));
+    }
   }
 
   @override
