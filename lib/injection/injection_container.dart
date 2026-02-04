@@ -13,13 +13,13 @@ import 'package:news/features/news/domain/repositories/news_repository.dart';
 import 'package:news/features/news/domain/usecases/usecases.dart';
 import 'package:news/features/news/presentation/bloc/news_bloc.dart';
 import 'package:news/injection/details_injection.dart';
+import 'package:news/injection/saves_injection.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
 final sl = GetIt.instance;
 
 Future<void> initDependencies() async {
-
   sl.registerLazySingleton<DioClient>(
     () => DioClient(
       Dio(
@@ -39,7 +39,7 @@ Future<void> initDependencies() async {
     () => NewsApiServiceImpl(sl<DioClient>()),
   );
 
-  // news local db 
+  // news local db
   sl.registerLazySingleton<AppDatabase>(() {
     return AppDatabase(
       LazyDatabase(() async {
@@ -70,7 +70,6 @@ Future<void> initDependencies() async {
     () => GetNewsUseCase(sl<NewsRepository>()),
   );
 
-
   // Bloc
   sl.registerFactory(
     () => NewsBloc(
@@ -79,8 +78,6 @@ Future<void> initDependencies() async {
     ),
   );
 
-    initDetailDeps();
-
-
+  await initDetailDeps();
+  await initSavedNewsDeps();
 }
-
