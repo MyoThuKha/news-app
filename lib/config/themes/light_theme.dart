@@ -6,18 +6,22 @@ class LightTheme implements AppTheme {
   @override
   AppThemeMode get mode => AppThemeMode.light;
 
+  final ColorScheme _colorScheme = ColorScheme.fromSeed(
+    seedColor: Colors.orange,
+    brightness: Brightness.light,
+  );
+
   @override
   ThemeData get themeData {
+
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.deepPurple,
-        brightness: Brightness.light,
-      ),
+      colorScheme: _colorScheme,
       appBarTheme: const AppBarTheme(
         elevation: 0,
         scrolledUnderElevation: 1,
+        centerTitle: false,
       ),
       cardTheme: const CardThemeData(
         elevation: 1,
