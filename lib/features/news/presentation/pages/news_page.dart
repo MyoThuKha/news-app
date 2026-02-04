@@ -111,12 +111,12 @@ class _NewsViewState extends State<_NewsView> {
                   return state.maybeWhen(
                     orElse: () => const SizedBox.shrink(),
                     loading: () => Center(child: CircularProgressIndicator()),
-                    success: (news, _) {
+                    success: (news, fromCache) {
                       return GestureDetector(
                         onTap: () => Navigator.pushNamed(
                           context,
                           DetailsPage.route,
-                          arguments: news.url,
+                          arguments: {'url': news.url, 'fromCache': fromCache},
                         ),
                         child: TopNewsWidget(newsData: news),
                       );
@@ -196,7 +196,7 @@ class _NewsViewState extends State<_NewsView> {
                   Navigator.pushNamed(
                     context,
                     DetailsPage.route,
-                    arguments: news[index].url,
+                    arguments: {'url': news[index].url, 'fromCache': isCached},
                   );
                 },
                 child: NewsTile(newsData: news[index]),

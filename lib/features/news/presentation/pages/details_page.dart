@@ -17,7 +17,9 @@ class DetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final url = ModalRoute.of(context)!.settings.arguments as String;
+    final arg =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+    final url = arg['url'] as String;
 
     return MultiBlocProvider(
       providers: [
@@ -64,11 +66,16 @@ class _DetailView extends StatefulWidget {
 class _DetailViewState extends State<_DetailView> {
 
   late final String url;
+  late final bool fromCache;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    url = ModalRoute.of(context)!.settings.arguments as String;
+    final arg =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
+    url = arg['url'] as String;
+    fromCache = arg['fromCache'] as bool;
   }
 
 
@@ -134,7 +141,6 @@ class _DetailViewState extends State<_DetailView> {
           ],
         ),
 
-        // MARK: Title
         SliverToBoxAdapter(
           child: Padding(
             padding: const .all(10),
@@ -142,10 +148,14 @@ class _DetailViewState extends State<_DetailView> {
               spacing: 20,
               crossAxisAlignment: .start,
               children: [
-                Align(
-                  alignment: .topRight,
-                  child: LastUpdatedTimestamp(timestamp: newsData.cachedAt),
-                ),
+
+                if (fromCache)
+                  Align(
+                    alignment: .topRight,
+                    child: LastUpdatedTimestamp(timestamp: newsData.cachedAt),
+                  ),
+
+                // MARK: Title
                 Text(
                   newsData.title,
                   style: context.textTheme.titleLarge?.copyWith(
@@ -192,6 +202,8 @@ class _DetailViewState extends State<_DetailView> {
                     color: context.colorScheme.onPrimaryContainer,
                   ),
                 ),
+
+                SizedBox(height: context.viewsPaddingOf.bottom),
               ],
             ),
           ),
