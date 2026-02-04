@@ -8,6 +8,7 @@ import 'package:news/features/news/presentation/widgets/last_updated_timestamp.d
 import 'package:news/features/saves/presentation/bloc/saved_news_bloc.dart';
 import 'package:news/injection/injection_container.dart';
 import 'package:news/core/ui/extensions/context_extensions.dart';
+import 'package:share_plus/share_plus.dart';
 
 class DetailsPage extends StatelessWidget {
   const DetailsPage({super.key});
@@ -89,13 +90,22 @@ class _DetailView extends StatelessWidget {
               onPressed: () {
                 context.read<SavedNewsBloc>().add(.saveAdded(newsData));
               },
-              child: const Icon(Icons.favorite),
+              child: BlocBuilder<SavedNewsBloc, SavedNewsState>(
+                builder: (context, state) {
+                  return state.maybeWhen(
+                    updated: (isSaved) {
+                      return isSaved
+                          ? const Icon(Icons.favorite)
+                          : const Icon(Icons.favorite_border);
+                    },
+                    orElse: () => const Icon(Icons.favorite_border),
+                  );
+                },
+              ),
             ),
             const SizedBox(width: 10),
             FilledButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              onPressed: () => _onShare(context),
               child: const Icon(Icons.share),
             ),
           ],
@@ -158,5 +168,18 @@ class _DetailView extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void _onShare(BuildContext context) {
+    final url = ModalRoute.of(context)!.settings.arguments as String;
+    final uri = Uri.tryParse(url);
+    if (uri == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to share. URL is invalid.')),
+      );
+      return;
+    }
+
+    SharePlus.instance.share(ShareParams(uri: uri));
   }
 }
