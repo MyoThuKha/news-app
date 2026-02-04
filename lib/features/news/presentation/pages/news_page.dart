@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news/core/ui/extensions/context_extensions.dart';
+import 'package:news/core/ui/widgets/no_data_widget.dart';
+import 'package:news/features/news/domain/entities/news/news_entity.dart';
 import 'package:news/features/news/presentation/bloc/news_bloc.dart';
 import 'package:news/features/news/presentation/pages/details_page.dart';
 import 'package:news/features/news/presentation/widgets/widgets.dart';
@@ -113,73 +115,87 @@ class _NewsViewState extends State<_NewsView> {
                   loading: () => const SliverFillRemaining(
                     child: Center(child: CircularProgressIndicator()),
                   ),
-                  error: (message) => SliverFillRemaining(
-                    child: Column(
-                      spacing: 30,
-                      mainAxisAlignment: .center,
-                      children: [
-                        Text(
-                          'Error: $message',
-                          textAlign: .center,
-                          style: context.textTheme.titleSmall,
-                        ),
-                        FilledButton(
-                          onPressed: () {
-                            context.read<NewsBloc>().add(
-                              const .newsRefreshed(),
-                            );
-                          },
-                          child: const Text('Retry'),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  success: (news, hasReachedMax, isMoreLoading) {
-                    return SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      sliver: SliverList.separated(
-                        itemCount: news.length,
-                        separatorBuilder: (_, _) => const SizedBox(height: 10),
-                        itemBuilder: (BuildContext context, int index) {
-                          return Column(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    DetailsPage.route,
-                                    arguments: news[index].url,
-                                  );
-                                },
-                                child: NewsTile(newsData: news[index]),
-                              ),
-
-                              if (index == news.length - 1)
-                                Padding(
-                                  padding: const .all(16),
-                                  child: hasReachedMax
-                                      ? const Text('No More Articles.')
-                                      : FilledButton(
-                                          onPressed: () {
-                                            context.read<NewsBloc>().add(
-                                              const NewsEvent.loadMore(),
-                                            );
-                                          },
-                                          child: const Text('Load More'),
-                                        ),
-                                ),
-                            ],
-                          );
-                        },
-                      ),
-                    );
-                  },
+                  error: (message) => _errorNewsListView(message, context),
+                  success: _successNewsListView,
                 );
               },
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  // MARK: Error View on List
+  SliverFillRemaining _errorNewsListView(String message, BuildContext context) {
+    return SliverFillRemaining(
+      child: Column(
+        spacing: 30,
+        mainAxisAlignment: .center,
+        children: [
+          Text(
+            'Error: $message',
+            textAlign: .center,
+            style: context.textTheme.titleSmall,
+          ),
+          FilledButton(
+            onPressed: () {
+              context.read<NewsBloc>().add(const .newsRefreshed());
+            },
+            child: const Text('Retry'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // MARK: News List View
+  Widget _successNewsListView(
+    List<NewsEntity> news,
+    bool hasReachedMax,
+    bool isMoreLoading,
+  ) {
+    if (news.isEmpty) {
+      return const SliverFillRemaining(
+        child: NoDataWidget(title: 'No News yet.'),
+      );
+    }
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      sliver: SliverList.separated(
+        itemCount: news.length,
+        separatorBuilder: (_, _) => const SizedBox(height: 10),
+        itemBuilder: (BuildContext context, int index) {
+          return Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    DetailsPage.route,
+                    arguments: news[index].url,
+                  );
+                },
+                child: NewsTile(newsData: news[index]),
+              ),
+
+              if (index == news.length - 1)
+                Padding(
+                  padding: const .all(16),
+                  child: hasReachedMax
+                      ? const Text('No More Articles.')
+                      : FilledButton(
+                          onPressed: () {
+                            context.read<NewsBloc>().add(
+                              const NewsEvent.loadMore(),
+                            );
+                          },
+                          child: const Text('Load More'),
+                        ),
+                ),
+            ],
+          );
+        },
       ),
     );
   }
