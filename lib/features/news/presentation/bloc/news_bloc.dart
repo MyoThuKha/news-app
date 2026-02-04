@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:news/features/news/domain/entities/entities.dart';
 import 'package:news/features/news/domain/usecases/usecases.dart';
@@ -27,7 +28,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
   void _newsRefreshed(_NewsRefreshed event, Emitter<NewsState> emit) async {
     _page = 1;
-    emit(const .loading());
+    // emit(const .loading());
     await _fetchNewsUseCase.call(FetchNewsParams(page: _page));
   }
 
@@ -52,13 +53,16 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   void _newsLoaded(_NewsLoaded event, Emitter<NewsState> emit) async {
     emit(.loading());
     try {
-      final pagedArticles = await _fetchNewsUseCase.call(
-        FetchNewsParams(page: _page),
-      );
-      _hasMore = pagedArticles.hasMore;
+      _fetchNewsUseCase.call(FetchNewsParams(page: _page)).then((
+        pagedArticles,
+      ) {
+        _hasMore = pagedArticles.hasMore;
+      });
 
       final stream = _getNewsUseCase.call(NoParams());
       await emit.forEach(stream, onData: (news) => .success(news: news));
+    } on DioException catch (e) {
+      print(e);
     } catch (e) {
       emit(_Error(message: e.toString()));
     }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news/core/ui/extensions/context_extensions.dart';
 import 'package:news/features/news/presentation/bloc/news_bloc.dart';
 import 'package:news/features/news/presentation/widgets/widgets.dart';
 import 'package:news/injection/injection_container.dart';
@@ -62,45 +63,33 @@ class _NewsViewState extends State<_NewsView> {
               ),
             ),
 
-            // MARK: Top Headlines News Section
-            SliverToBoxAdapter(child: SectionTitle(title: 'Top News')),
             SliverToBoxAdapter(
-              child: SizedBox(
-                height: 200,
-                child: BlocBuilder<NewsBloc, NewsState>(
-                  builder: (context, state) {
-                    return state.when(
-                      initial: () => Center(child: Text('Pull to refresh')),
-                      loading: () => Center(child: CircularProgressIndicator()),
-                      error: (message) => Center(
-                        child: Column(
-                          spacing: 15,
-                          mainAxisAlignment: .center,
-                          children: [
-                            Text('Error: $message'),
-                            FilledButton(
-                              onPressed: () {
-                                context.read<NewsBloc>().add(
-                                  const .newsLoaded(),
-                                );
-                              },
-                              child: const Text('Retry'),
+              child: BlocBuilder<NewsBloc, NewsState>(
+                builder: (context, state) {
+                  return state.when(
+                    initial: () => Center(child: Text('Pull to refresh')),
+                    loading: () => Center(child: CircularProgressIndicator()),
+                    error: (message) => const SizedBox.shrink(),
+                    success: (news, hasReachedMax, _) {
+                      return Column(
+                        crossAxisAlignment: .start,
+                        children: [
+                          const SectionTitle(title: 'Top News'),
+                          SizedBox(
+                            height: 200,
+                            child: CarouselView(
+                              controller: _carouselController,
+                              itemExtent: 300,
+                              children: news
+                                  .map((news) => TopNewsWidget(newsData: news))
+                                  .toList(),
                             ),
-                          ],
-                        ),
-                      ),
-                      success: (news, hasReachedMax, _) {
-                        return CarouselView(
-                          controller: _carouselController,
-                          itemExtent: 300,
-                          children: news
-                              .map((news) => TopNewsWidget(newsData: news))
-                              .toList(),
-                        );
-                      },
-                    );
-                  },
-                ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
               ),
             ),
 
@@ -116,20 +105,24 @@ class _NewsViewState extends State<_NewsView> {
                     child: Center(child: CircularProgressIndicator()),
                   ),
                   error: (message) => SliverFillRemaining(
-                    child: Center(
-                      child: Column(
-                        spacing: 15,
-                        mainAxisAlignment: .center,
-                        children: [
-                          Text('Error: $message'),
-                          FilledButton(
-                            onPressed: () {
-                              context.read<NewsBloc>().add(const .newsLoaded());
-                            },
-                            child: const Text('Retry'),
-                          ),
-                        ],
-                      ),
+                    child: Column(
+                      spacing: 30,
+                      mainAxisAlignment: .center,
+                      children: [
+                        Text(
+                          'Error: $message',
+                          textAlign: .center,
+                          style: context.textTheme.titleSmall,
+                        ),
+                        FilledButton(
+                          onPressed: () {
+                            context.read<NewsBloc>().add(
+                              const .newsRefreshed(),
+                            );
+                          },
+                          child: const Text('Retry'),
+                        ),
+                      ],
                     ),
                   ),
 
@@ -142,7 +135,16 @@ class _NewsViewState extends State<_NewsView> {
                         itemBuilder: (BuildContext context, int index) {
                           return Column(
                             children: [
-                              NewsTile(newsData: news[index]),
+                              GestureDetector(
+                                onTap: () {
+                                  // Navigator.pushNamed(
+                                  //   context,
+                                  //   DetailsPage.route,
+                                  //   arguments: news[index].url,
+                                  // );
+                                },
+                                child: NewsTile(newsData: news[index]),
+                              ),
 
                               if (index == news.length - 1)
                                 Padding(
