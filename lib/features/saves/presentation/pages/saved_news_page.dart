@@ -119,7 +119,10 @@ class _SavedNewsViewState extends State<_SavedNewsView> {
                   Navigator.pushNamed(
                     context,
                     DetailsPage.route,
-                    arguments: news[index].news.url,
+                    arguments: {
+                      'url': news[index].news.url,
+                      'fromCache': false,
+                    },
                   );
                 },
                 child: SavedNewsTile(newsData: news[index]),
